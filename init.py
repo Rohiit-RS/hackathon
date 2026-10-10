@@ -1,6 +1,6 @@
 """
 CivicTrack Tamil Nadu — Streamlit Direct App Gateway
-Seamless full-page delivery of the CivicTrack full-stack application.
+Zero-buffer full-screen delivery of the CivicTrack Public Works Portal.
 """
 
 import os
@@ -11,7 +11,6 @@ import socket
 import shutil
 import subprocess
 import urllib.request
-import urllib.error
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -22,7 +21,10 @@ BACKEND_PORT = 5000
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SERVER_DIR = os.path.join(PROJECT_ROOT, "server")
 BACKEND_HEALTH_URL = f"http://localhost:{BACKEND_PORT}/api/health"
-WEB_APP_URL = f"http://localhost:{BACKEND_PORT}"
+
+# Preferred standalone embed endpoint (hosted directly via Streamlit static serving)
+STATIC_APP_URL = "/app/static/index.html"
+LOCAL_APP_URL = f"http://localhost:{BACKEND_PORT}"
 
 st.set_page_config(
     page_title="CivicTrack | Greater Municipal Corporation Portal",
@@ -32,93 +34,59 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# Background Process Helper (Ensures Node.js Backend is Running)
+# Background Process Helper (Optional Local Backend Starter)
 # -----------------------------------------------------------------------------
 def check_backend_health():
     try:
         req = urllib.request.Request(BACKEND_HEALTH_URL, headers={'User-Agent': 'CivicTrack-Gateway'})
-        with urllib.request.urlopen(req, timeout=0.8) as response:
+        with urllib.request.urlopen(req, timeout=0.5) as response:
             if response.status == 200:
-                data = json.loads(response.read().decode())
-                return True, data
+                return True
     except Exception:
         pass
-    return False, None
-
-def get_node_executable():
-    for cmd in ["node", "nodejs", "/usr/bin/node", "/usr/bin/nodejs", "/usr/local/bin/node"]:
-        path = shutil.which(cmd)
-        if path:
-            return path
-    return None
-
-def get_npm_executable():
-    for cmd in ["npm", "/usr/bin/npm", "/usr/local/bin/npm"]:
-        path = shutil.which(cmd)
-        if path:
-            return path
-    return None
-
-def ensure_server_dependencies():
-    node_modules = os.path.join(SERVER_DIR, "node_modules")
-    if os.path.exists(node_modules):
-        return True
-    
-    npm = get_npm_executable()
-    if not npm:
-        return False
-    
-    try:
-        res = subprocess.run(
-            [npm, "install", "--omit=dev", "--no-audit", "--no-fund"],
-            cwd=SERVER_DIR,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            timeout=120
-        )
-        return res.returncode == 0
-    except Exception:
-        return False
+    return False
 
 def ensure_backend_started():
-    is_healthy, _ = check_backend_health()
-    if is_healthy:
+    if check_backend_health():
         return True
-
-    node_bin = get_node_executable()
+    node_bin = shutil.which("node") or shutil.which("nodejs")
     if not node_bin:
         return False
-
     server_index = os.path.join(SERVER_DIR, "index.js")
     if not os.path.exists(server_index):
         return False
-
-    ensure_server_dependencies()
-
-    log_path = os.path.join(SERVER_DIR, "server.log")
     try:
+        log_path = os.path.join(SERVER_DIR, "server.log")
         log_file = open(log_path, "a", encoding="utf-8")
-        p = subprocess.Popen(
+        subprocess.Popen(
             [node_bin, "index.js"],
             cwd=SERVER_DIR,
             stdout=log_file,
             stderr=log_file,
             shell=(os.name == "nt")
         )
-
-        for _ in range(12):
-            time.sleep(0.4)
-            healthy, _ = check_backend_health()
-            if healthy:
+        for _ in range(8):
+            time.sleep(0.3)
+            if check_backend_health():
                 return True
-
-        return False
     except Exception:
-        return False
+        pass
+    return False
 
-# Ensure the backend service is up
-backend_running = ensure_backend_started()
+# Attempt background backend startup if running locally
+try:
+    ensure_backend_started()
+except Exception:
+    pass
+
+# Choose the active URL (Static Cloud endpoint is 100% independent of localhost)
+static_path = os.path.join(PROJECT_ROOT, "static", "index.html")
+if os.path.exists(static_path):
+    final_url = STATIC_APP_URL
+elif check_backend_health():
+    final_url = LOCAL_APP_URL
+else:
+    final_url = STATIC_APP_URL
 
 # -----------------------------------------------------------------------------
 # Zero-Buffer Fullscreen Streamlit Styling
@@ -178,6 +146,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# Direct Localhost Embed
+# Full-Screen App Embed
 # -----------------------------------------------------------------------------
-components.iframe(WEB_APP_URL, height=1000, scrolling=True)
+components.iframe(final_url, height=1000, scrolling=True)

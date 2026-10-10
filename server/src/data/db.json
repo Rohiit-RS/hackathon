@@ -170,6 +170,52 @@
       "ward": "Ward 4 (Anna Nagar)",
       "phone": "+91 98400 00000",
       "designation": "Verified Resident"
+    },
+    {
+      "id": "usr_admin_gov",
+      "name": "Dr. V. Rajesh, IAS (Gov)",
+      "email": "admin@tn.gov.in",
+      "password": "admin123",
+      "role": "admin",
+      "ward": "State HQ (Chennai)",
+      "phone": "+91 94440 00001",
+      "designation": "State Infrastructure Commissioner"
+    },
+    {
+      "id": "usr_highways_gov",
+      "name": "Er. K. Balaji (Highways)",
+      "email": "highways@tn.gov.in",
+      "password": "highways123",
+      "role": "department_officer",
+      "department_id": "dept_highways",
+      "department_name": "Highways Department",
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "+91 94440 00002",
+      "designation": "Assistant Divisional Engineer"
+    },
+    {
+      "id": "usr_water_gov",
+      "name": "Er. M. Deepa (CMWSSB)",
+      "email": "water@cmwssb.tn.gov.in",
+      "password": "water123",
+      "role": "department_officer",
+      "department_id": "dept_cmwssb",
+      "department_name": "CMWSSB (Water & Sewerage)",
+      "ward": "Ward 10 (T. Nagar)",
+      "phone": "+91 94440 00003",
+      "designation": "Executive Engineer (Underground)"
+    },
+    {
+      "id": "usr_power_gov",
+      "name": "Er. S. Narayanan (TANGEDCO)",
+      "email": "power@tangedco.gov.in",
+      "password": "power123",
+      "role": "department_officer",
+      "department_id": "dept_tangedco",
+      "department_name": "TANGEDCO (Electricity Distribution)",
+      "ward": "Ward 7 (Adyar)",
+      "phone": "+91 94440 00004",
+      "designation": "Superintending Engineer"
     }
   ],
   "departments": [
@@ -650,7 +696,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹25,00,000 sanctioned."
+          "details": "Initial budget of \u20b925,00,000 sanctioned."
         }
       ]
     },
@@ -688,7 +734,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹2,50,00,000 sanctioned."
+          "details": "Initial budget of \u20b92,50,00,000 sanctioned."
         }
       ]
     },
@@ -726,7 +772,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹25,00,000 sanctioned."
+          "details": "Initial budget of \u20b925,00,000 sanctioned."
         }
       ]
     },
@@ -764,7 +810,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹25,00,000 sanctioned."
+          "details": "Initial budget of \u20b925,00,000 sanctioned."
         }
       ]
     },
@@ -802,7 +848,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹25,00,000 sanctioned."
+          "details": "Initial budget of \u20b925,00,000 sanctioned."
         }
       ]
     },
@@ -840,7 +886,7 @@
           "date": "2026-10-10",
           "title": "Project Sanctioned & Approved",
           "status": "completed",
-          "details": "Initial budget of ₹25,00,000 sanctioned."
+          "details": "Initial budget of \u20b925,00,000 sanctioned."
         }
       ]
     }
