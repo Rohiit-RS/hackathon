@@ -156,6 +156,20 @@
       "ward": "Ward 4 (Anna Nagar)",
       "phone": "9898989898",
       "designation": "Public Official"
+    },
+    {
+      "id": "usr_1791647630063_649",
+      "name": "Name1",
+      "email": "sampleemail@gmail.com",
+      "password": "sameplepassword",
+      "role": "citizen",
+      "profession": "citizen",
+      "department_id": null,
+      "department_name": null,
+      "contractor_name": null,
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "+91 98400 00000",
+      "designation": "Verified Resident"
     }
   ],
   "departments": [
@@ -677,6 +691,158 @@
           "details": "Initial budget of ₹2,50,00,000 sanctioned."
         }
       ]
+    },
+    {
+      "id": "proj_1791644744177",
+      "title": "Maintenance",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. M. Deepa.",
+      "purpose": "Scheduled Dig-Once Overhaul for water",
+      "category": "water",
+      "severity": "Moderate",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Gandhi Road Junction",
+      "latitude": 12.830642581330904,
+      "longitude": 79.70997323189917,
+      "sanctioned_budget": 2500000,
+      "amount_spent": 0,
+      "maintenance_budget": 250000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "2026-10-31",
+      "original_end_date": "2026-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹25,00,000 sanctioned."
+        }
+      ]
+    },
+    {
+      "id": "proj_1791646997601",
+      "title": "Maintenance Resolution: pothole",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. K. Balaji.",
+      "purpose": "Scheduled Dig-Once Overhaul for roads",
+      "category": "roads",
+      "severity": "Moderate",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Address",
+      "latitude": 12.838156196480828,
+      "longitude": 80.13350486755371,
+      "sanctioned_budget": 2500000,
+      "amount_spent": 0,
+      "maintenance_budget": 250000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "2026-10-31",
+      "original_end_date": "2026-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹25,00,000 sanctioned."
+        }
+      ]
+    },
+    {
+      "id": "proj_1791647753282",
+      "title": "Maintenance Resolution: pothole",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. K. Balaji.",
+      "purpose": "Scheduled Dig-Once Overhaul for roads",
+      "category": "roads",
+      "severity": "Moderate",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Address",
+      "latitude": 12.83874064761206,
+      "longitude": 80.1394271850586,
+      "sanctioned_budget": 2500000,
+      "amount_spent": 0,
+      "maintenance_budget": 250000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "2026-10-31",
+      "original_end_date": "2026-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹25,00,000 sanctioned."
+        }
+      ]
+    },
+    {
+      "id": "proj_1791647793698",
+      "title": "Random maintenance",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. K. Balaji.",
+      "purpose": "Scheduled Dig-Once Overhaul for roads",
+      "category": "roads",
+      "severity": "Moderate",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Address",
+      "latitude": 12.831887958826435,
+      "longitude": 79.69627094165493,
+      "sanctioned_budget": 2500000,
+      "amount_spent": 0,
+      "maintenance_budget": 250000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "2026-10-31",
+      "original_end_date": "2026-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹25,00,000 sanctioned."
+        }
+      ]
     }
   ],
   "reports": [
@@ -1004,6 +1170,102 @@
       "photo_hash": "0a40e4021800c8dbde8fe2d4abf3f9988581e6e820b0d41f81f60f165b03053a",
       "photos_hashes": [
         "0a40e4021800c8dbde8fe2d4abf3f9988581e6e820b0d41f81f60f165b03053a"
+      ],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791644681850_275",
+      "created_at": "2026-10-10T15:04:41.850Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Blocked drain",
+      "description": "flooded roads",
+      "category": "drainage",
+      "problem_type": "blocked drain",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Gandhi Road / Collectorate Junction",
+      "latitude": 12.834953077595301,
+      "longitude": 80.13588572411666,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791644681848_874b1986.png",
+      "photos": [
+        "/uploads/img_1791644681848_874b1986.png"
+      ],
+      "photo_hash": "874b19865db1e9585f35c5b160258dbbbc5214cc1304c0395ae11daa50fc45f4",
+      "photos_hashes": [
+        "874b19865db1e9585f35c5b160258dbbbc5214cc1304c0395ae11daa50fc45f4"
+      ],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791646942481_69",
+      "created_at": "2026-10-10T15:42:22.481Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Roads dug up",
+      "description": "Increased traffic",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Address",
+      "latitude": 12.838156196480828,
+      "longitude": 80.13350486755371,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "manual_pin",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791646942480_db8fd66e.jpg",
+      "photos": [
+        "/uploads/img_1791646942480_db8fd66e.jpg"
+      ],
+      "photo_hash": "db8fd66e89396d20ec78aa90610ed4db7da36c99dfc375e77f0c127f35fe632d",
+      "photos_hashes": [
+        "db8fd66e89396d20ec78aa90610ed4db7da36c99dfc375e77f0c127f35fe632d"
+      ],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791647679706_442",
+      "created_at": "2026-10-10T15:54:39.706Z",
+      "status": "submitted",
+      "user_id": "usr_1791647630063_649",
+      "user_name": "Name1",
+      "user_email": "sampleemail@gmail.com",
+      "title": "Pothole on the road",
+      "description": "possible accidents",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Address",
+      "latitude": 12.83874064761206,
+      "longitude": 80.1394271850586,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "manual_pin",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791647679703_625b5e32.jpg",
+      "photos": [
+        "/uploads/img_1791647679703_625b5e32.jpg"
+      ],
+      "photo_hash": "625b5e3214f0036b12f54167ccaa319494203fd0e7007c3a736977f3910162c4",
+      "photos_hashes": [
+        "625b5e3214f0036b12f54167ccaa319494203fd0e7007c3a736977f3910162c4"
       ],
       "department_reply": null,
       "citizen_confirmed_resolved": false

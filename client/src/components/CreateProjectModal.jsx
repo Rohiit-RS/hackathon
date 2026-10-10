@@ -196,7 +196,7 @@ export default function CreateProjectModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+    <div className="fixed inset-0 z-[100] overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in">
       <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
         <div className="px-6 py-4 bg-gradient-to-r from-slate-900 to-[#0b2545] text-white flex items-center justify-between">
@@ -364,7 +364,7 @@ export default function CreateProjectModal({ isOpen, onClose, onSuccess }) {
               </span>
             </div>
 
-            <div className="h-44 w-full rounded-2xl overflow-hidden border border-slate-300 relative shadow-inner">
+            <div className="h-44 w-full rounded-2xl overflow-hidden border border-slate-300 relative isolate shadow-inner">
               <MapContainer
                 center={[latitude, longitude]}
                 zoom={14}

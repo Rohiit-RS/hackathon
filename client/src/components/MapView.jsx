@@ -498,7 +498,7 @@ export default function MapView({
   const totalVisibleCount = (showDeptProjects ? filteredProjects.length : 0) + (showCitizenIssues ? filteredCitizenIssues.length : 0);
 
   return (
-    <div className="relative w-full h-[580px] rounded-3xl overflow-hidden border border-slate-200/90 shadow-md bg-slate-100 flex">
+    <div className="relative isolate w-full h-[580px] rounded-3xl overflow-hidden border border-slate-200/90 shadow-md bg-slate-100 flex">
       {/* Map Surface */}
       <div className="flex-1 relative h-full">
         <MapContainer
