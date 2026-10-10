@@ -21,12 +21,12 @@ import streamlit.components.v1 as components
 # Configuration & Constants
 # -----------------------------------------------------------------------------
 BACKEND_PORT = 5000
+FRONTEND_PORT = 5173
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SERVER_DIR = os.path.join(PROJECT_ROOT, "server")
 DB_JSON_PATH = os.path.join(SERVER_DIR, "src", "data", "db.json")
 BACKEND_HEALTH_URL = f"http://localhost:{BACKEND_PORT}/api/health"
-LOCAL_WEB_APP_URL = f"http://localhost:{BACKEND_PORT}"
-STATIC_WEB_APP_URL = "/app/static/index.html"
+WEB_APP_URL = f"http://localhost:{BACKEND_PORT}"
 
 st.set_page_config(
     page_title="CivicTrack TN | Dig-Once & Public Works Coordination",
@@ -85,13 +85,13 @@ st.markdown("""
 # -----------------------------------------------------------------------------
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(0.3)
+        s.settimeout(0.5)
         return s.connect_ex(('127.0.0.1', port)) == 0
 
 def check_backend_health():
     try:
         req = urllib.request.Request(BACKEND_HEALTH_URL, headers={'User-Agent': 'CivicTrack-Streamlit'})
-        with urllib.request.urlopen(req, timeout=0.8) as response:
+        with urllib.request.urlopen(req, timeout=1.0) as response:
             if response.status == 200:
                 data = json.loads(response.read().decode())
                 return True, data
@@ -153,6 +153,7 @@ def ensure_backend_started():
     if not os.path.exists(server_index):
         return False, f"Server entrypoint not found at {server_index}"
 
+    # Verify dependencies
     ensure_server_dependencies()
 
     log_path = os.path.join(SERVER_DIR, "server.log")
@@ -169,12 +170,14 @@ def ensure_backend_started():
             shell=(os.name == "nt")
         )
 
-        for _ in range(12):
+        # Wait up to 8 seconds for boot
+        for _ in range(16):
             time.sleep(0.5)
             healthy, health_data = check_backend_health()
             if healthy:
                 return True, "Backend successfully initialized and running on port 5000"
 
+        # Check if process crashed
         if p.poll() is not None:
             log_file.close()
             log_snippet = ""
@@ -192,7 +195,8 @@ def ensure_backend_started():
 # -----------------------------------------------------------------------------
 @st.cache_data(ttl=5)
 def load_civic_data():
-    """Load projects, reports, users, and departments from db.json."""
+    """Load projects, reports, users, and departments either via API or db.json directly."""
+    # Attempt via DB file directly for instantaneous speed and offline resilience
     if os.path.exists(DB_JSON_PATH):
         try:
             with open(DB_JSON_PATH, "r", encoding="utf-8") as f:
@@ -201,6 +205,7 @@ def load_civic_data():
         except Exception as e:
             st.error(f"Error reading database file: {e}")
 
+    # Fallback to empty schema
     return {"projects": [], "reports": [], "users": [], "departments": [], "workOrders": [], "contractors": []}
 
 def calculate_dig_once_conflicts(projects, radius_meters=200):
@@ -236,16 +241,16 @@ def calculate_dig_once_conflicts(projects, radius_meters=200):
                         "Dept B": p2.get("department_name", "Dept"),
                         "Distance (m)": round(dist, 1),
                         "Ward": p1.get("ward", "Chennai Region"),
-                        "Recommendation": "Consolidate excavation into joint trenching to prevent duplicate road re-cutting."
+                        "Recommendation": "Consolidate excavation into joint trenching to prevent road re-cutting."
                     })
             except Exception:
                 continue
     return conflicts
 
 # -----------------------------------------------------------------------------
-# Main Application Flow & Diagnostics
+# Main Application Flow
 # -----------------------------------------------------------------------------
-backend_ok, backend_msg = check_backend_health()
+backend_ok, backend_msg = ensure_backend_started()
 data = load_civic_data()
 
 projects = data.get("projects", [])
@@ -257,11 +262,8 @@ contractors = data.get("contractors", [])
 
 conflicts = calculate_dig_once_conflicts(projects)
 
-# Check if static build exists
-static_index_exists = os.path.exists(os.path.join(PROJECT_ROOT, "static", "index.html"))
-
 # -----------------------------------------------------------------------------
-# Sidebar Navigation & Settings
+# Sidebar Navigation & Quick Credentials
 # -----------------------------------------------------------------------------
 with st.sidebar:
     st.markdown("### 🏛️ CivicTrack TN")
@@ -271,58 +273,29 @@ with st.sidebar:
     # Engine Status Pill
     if backend_ok:
         st.success(f"🟢 Full-Stack Engine: Online\n(Port {BACKEND_PORT})")
-    elif static_index_exists:
-        st.info("☁️ Cloud Native Mode Active\n(React SPA Embedded)")
     else:
-        st.warning("⚠️ Direct Data Mode Active")
+        st.warning("🟡 Direct Data Mode Active\n(Node.js not connected)")
 
-    # App source selector
-    st.markdown("#### 🌐 Web App Embed Source")
-    default_mode_index = 0 if static_index_exists else (1 if backend_ok else 0)
-    source_mode = st.radio(
-        "Application Mode:",
-        ["☁️ Cloud-Native (Streamlit Static Server)", "💻 Local Node.js Backend (Port 5000)", "🔗 Custom Public HTTPS URL"],
-        index=default_mode_index
-    )
-
-    custom_url_input = ""
-    if "Custom Public HTTPS" in source_mode:
-        custom_url_input = st.text_input("Enter HTTPS Web App URL:", value="", placeholder="https://civictrack.onrender.com")
-
-    # Determine final embed URL
-    if "Custom Public HTTPS" in source_mode and custom_url_input.strip():
-        final_embed_url = custom_url_input.strip()
-    elif "Local Node.js" in source_mode:
-        final_embed_url = LOCAL_WEB_APP_URL
-    else:
-        final_embed_url = STATIC_WEB_APP_URL
-
-    st.markdown("---")
     st.markdown("### 🔑 Demo Accounts & Roles")
     st.markdown("""
-    Log in with any role using **pwd: `demo1234`**:
-    - 🛡️ **Admin**: `admin@demo.com`
-    - 👤 **Citizen**: `citizen@demo.com`
-    - 🛣️ **Roads & Highways**: `roads@demo.com`
-    - 💧 **Water Works**: `water@demo.com`
-    - ⚡ **Sewage Board**: `sewage@demo.com`
-
-    *Official Gov Login*:
-    - 🛡️ `admin@tn.gov.in` (pwd: `admin123`)
-    - 🛣️ `highways@tn.gov.in` (pwd: `highways123`)
-    - 💧 `water@cmwssb.tn.gov.in` (pwd: `water123`)
+    Use these accounts on the portal or create your own custom account:
+    - 👑 **Admin**: `admin@tn.gov.in` / `admin123`
+    - 🛣️ **Highways**: `highways@tn.gov.in` / `highways123`
+    - 💧 **Water (CMWSSB)**: `water@cmwssb.tn.gov.in` / `water123`
+    - ⚡ **Power (TANGEDCO)**: `power@tangedco.gov.in` / `power123`
+    - 👤 **Citizen**: `citizen@demo.com` / `demo1234`
     """)
 
     st.markdown("---")
     st.markdown("### 🚀 Quick Launch")
-    st.link_button("↗️ Open App in New Window", final_embed_url, use_container_width=True)
+    st.link_button("🌐 Open Web App (Fullscreen)", WEB_APP_URL, use_container_width=True)
 
     if st.button("🔄 Refresh Data Cache", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
 
     st.markdown("---")
-    st.caption("CivicTrack TN • 24-Hour Web Dev Hackathon • IIITDM Kancheepuram")
+    st.caption("CivicTrack v2.0 • Dig-Once Tamil Nadu Public Works Infrastructure")
 
 # -----------------------------------------------------------------------------
 # Header Banner
@@ -331,7 +304,7 @@ st.markdown("""
 <div class="tn-header">
     <div class="tn-badge">Tamil Nadu Infrastructure Coordination Portal</div>
     <h1 style="margin: 0; font-size: 26px; font-weight: 800; color: white;">
-        CivicTrack 🏛️ Inter-Agency Dig-Once Public Works System
+        CivicTrack — Inter-Agency Dig-Once Public Works System
     </h1>
     <p style="margin: 6px 0 0 0; font-size: 14px; opacity: 0.9; color: #e2e8f0;">
         Eliminating duplicate road excavation, orchestrating joint municipal utility trenches, and tracking citizen grievances across Tamil Nadu.
@@ -396,27 +369,17 @@ tab_app, tab_map, tab_conflicts, tab_reports, tab_health = st.tabs([
 with tab_app:
     st.subheader("Live CivicTrack Full Application Portal")
 
-    top_app_col1, top_app_col2 = st.columns([3, 1])
-    with top_app_col1:
-        if "Local Node.js" in source_mode:
-            if backend_ok:
-                st.success("🟢 Connected to Live Node.js Express Backend (Port 5000)")
-            else:
-                st.warning("⚠️ Node.js server not running on localhost:5000. Start backend below or switch to Cloud-Native mode in sidebar.")
-        elif "Custom Public" in source_mode:
-            st.info(f"🔗 Embedding Deployed Service: `{final_embed_url}`")
-        else:
-            st.success("☁️ Cloud-Native Mode Active: Full CivicTrack React SPA rendered seamlessly online.")
-
-    with top_app_col2:
-        st.link_button("↗️ Fullscreen View", final_embed_url, use_container_width=True)
-
-    # Localhost auto-start controller if local mode selected and offline
-    if "Local Node.js" in source_mode and not backend_ok:
-        start_col1, start_col2 = st.columns([1, 1])
-        with start_col1:
+    # Check if backend is available for iframe
+    if backend_ok:
+        st.success(f"🟢 Full-Stack Engine: Online & Connected (Port {BACKEND_PORT})")
+        st.info("The complete React + Leaflet interactive client is embedded below. You can log in, switch departments, report issues by dragging pins on the map, schedule maintenance windows, and approve joint excavation permits.")
+        components.iframe(WEB_APP_URL, height=880, scrolling=True)
+    else:
+        st.warning("⚠️ The Node.js Express server is initializing or not running locally. You can browse the spatial data and analytics tabs above, or start the server using `node server/index.js`.")
+        col_a, col_b = st.columns([1, 1])
+        with col_a:
             st.code("cd server\nnode index.js", language="bash")
-        with start_col2:
+        with col_b:
             if st.button("🚀 Attempt Backend Auto-Start", use_container_width=True):
                 with st.spinner("Initializing Node.js runtime and starting backend server..."):
                     started, start_msg = ensure_backend_started()
@@ -427,10 +390,23 @@ with tab_app:
                     else:
                         st.error(f"❌ {start_msg}")
 
-    # Embed the Full Interactive React Web App
-    components.iframe(final_embed_url, height=920, scrolling=True)
+        # Show log diagnostics if server.log exists
+        log_path = os.path.join(SERVER_DIR, "server.log")
+        if os.path.exists(log_path):
+            with st.expander("📄 View Server Diagnostics & Boot Log"):
+                try:
+                    with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
+                        st.code(f.read()[-1500:], language="text")
+                except Exception:
+                    pass
 
-    st.caption("Tip: Use the top-right persona menu inside the app to switch instantly between Citizen, Water Works, Sewage Board, Roads & Highways, and Municipal Admin roles.")
+        st.markdown("---")
+        st.markdown("### 💡 Cloud Architecture Note")
+        st.caption(
+            "On cloud platforms (Streamlit Community Cloud), the backend runs inside the container on loopback port 5000. "
+            "All live Public Works GIS maps, Dig-Once Conflict Engine calculations, and Citizen Grievances in Tabs 2, 3, 4, and 5 "
+            "are fully active and operating directly on the real-time dataset."
+        )
 
 # -----------------------------------------------------------------------------
 # TAB 2: SPATIAL GIS & PROJECTS MAP
@@ -554,6 +530,7 @@ with tab_reports:
     with rep_summary_cols[3]:
         st.metric("Resolved", sum(1 for r in reports if r.get("status") == "resolved"))
 
+    # Table of reports
     if reports:
         report_rows = []
         for r in reports:
@@ -581,18 +558,15 @@ with tab_health:
 
     h_col1, h_col2 = st.columns(2)
     with h_col1:
-        st.markdown("#### Cloud-Native & Backend Diagnostics")
-        st.markdown(f"- **Port 5000 Active (Local Node)**: `{'YES' if is_port_in_use(5000) else 'NO'}`")
-        st.markdown(f"- **Static Client Build Present**: `{'YES (/static/index.html)' if static_index_exists else 'NO'}`")
-        st.markdown(f"- **Active Embed Target**: `{final_embed_url}`")
-        
-        st.json({
-            "service": "CivicTrack Public Works System",
-            "state": "operational",
-            "embed_mode": source_mode,
-            "engine": "React + Vite SPA with Node Express & Dig-Once Engine",
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ")
-        })
+        st.markdown("#### Backend Service Probe")
+        st.markdown(f"- **Port 5000 Active**: `{'YES' if is_port_in_use(5000) else 'NO'}`")
+        st.markdown(f"- **Port 5173 (Vite Dev)**: `{'YES' if is_port_in_use(5173) else 'NO'}`")
+        st.markdown(f"- **Health Endpoint**: `{BACKEND_HEALTH_URL}`")
+        is_healthy, health_data = check_backend_health()
+        if is_healthy:
+            st.json(health_data)
+        else:
+            st.warning("Backend API is currently offline or starting up.")
 
     with h_col2:
         st.markdown("#### Database Summary")
@@ -604,29 +578,12 @@ with tab_health:
         st.markdown(f"- **Work Orders Count**: `{len(work_orders)}`")
 
     st.markdown("---")
-    st.markdown("#### 📜 Statutory Utility Dig-Once Sequencing Hierarchy")
+    st.markdown("#### Deployment Instructions")
     st.markdown("""
-    Under Tamil Nadu Public Works Statutory Guidelines, excavation depth determines coordination order:
-    
-    | Tier | Statutory Depth | Responsible Agency | Description |
-    |---|---|---|---|
-    | **1** | 2.0m – 3.5m | CMWSSB (Water & Sewerage) | Deep gravity mains, interceptors, trunk lines |
-    | **2** | 1.2m – 2.0m | GCC Stormwater Drainage | Box drains, culverts, street runoff pipelines |
-    | **3** | 0.8m – 1.2m | TANGEDCO (Electricity) | 11kV/33kV underground power cabling & conduits |
-    | **4** | 0.5m – 0.8m | Telecom & BharatNet | Optical fiber ducting, broadband conduits |
-    | **5** | 0.0m (Surface) | State Highways & GCC Roads | Bituminous concrete resurfacing & milling |
-    """)
-
-    st.markdown("---")
-    st.markdown("#### 🚀 Public Cloud Deployment Options")
-    st.markdown("""
-    **Option 1: Streamlit Cloud (Current Setup)**
-    - Both the Python Streamlit Executive Portal and the React Web Application run directly on Streamlit Cloud using `enableStaticServing = true`.
-    
-    **Option 2: 1-Click Render / Railway Full-Stack Deployment**
-    - Connect this repository (`Rohiit-RS/hackathon`).
-    - Set Root Directory: `server`.
-    - Build Command: `npm install`.
-    - Start Command: `node index.js`.
-    - Paste the generated HTTPS URL into the sidebar embed field for live public API synchronization!
+    **To deploy to Streamlit Cloud:**
+    1. Connect this GitHub repository.
+    2. Set Main file path: `init.py`.
+    3. Ensure `requirements.txt` contains `streamlit`, `pandas`, `requests`.
+    4. Ensure `packages.txt` contains `nodejs`, `npm`.
+    5. Hit Deploy!
     """)

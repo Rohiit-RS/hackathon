@@ -1,5 +1,3 @@
-import { mockStore } from './mockStore';
-
 const API_BASE = '/api';
 
 function getAuthHeaders(isFormData = false) {
@@ -17,424 +15,331 @@ function getAuthHeaders(isFormData = false) {
 export const api = {
   // AUTH
   login: async (email, password) => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
-    return await mockStore.login(email, password);
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    return data;
   },
 
   register: async (userData) => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
-    return await mockStore.register(userData);
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    return data;
   },
 
   demoSwitch: async (role, email) => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/demo-switch`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role, email })
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
-    return await mockStore.demoSwitch(role, email);
+    const res = await fetch(`${API_BASE}/auth/demo-switch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role, email })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to switch demo account');
+    return data;
   },
 
   getDemoAccounts: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/demo-accounts`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getDemoAccounts();
+    const res = await fetch(`${API_BASE}/auth/demo-accounts`);
+    return res.json();
   },
 
   getMe: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/me`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getMe();
+    const res = await fetch(`${API_BASE}/auth/me`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   // PROJECTS
   getProjects: async (params = {}) => {
-    try {
-      const query = new URLSearchParams(params).toString();
-      const res = await fetch(`${API_BASE}/projects${query ? `?${query}` : ''}`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getProjects(params);
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`${API_BASE}/projects${query ? `?${query}` : ''}`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   getProjectById: async (id) => {
-    try {
-      const res = await fetch(`${API_BASE}/projects/${id}`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getProjectById(id);
+    const res = await fetch(`${API_BASE}/projects/${id}`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   createProject: async (projectData) => {
-    try {
-      const res = await fetch(`${API_BASE}/projects`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(projectData)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.createProject(projectData);
+    const res = await fetch(`${API_BASE}/projects`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(projectData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to create project');
+    return data;
   },
 
   updateProjectStatus: async (id, updateData) => {
-    try {
-      const res = await fetch(`${API_BASE}/projects/${id}/status`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(updateData)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.updateProjectStatus(id, updateData);
+    const res = await fetch(`${API_BASE}/projects/${id}/status`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(updateData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update project status');
+    return data;
   },
 
   getProjectConflicts: async (id) => {
-    try {
-      const res = await fetch(`${API_BASE}/projects/${id}/conflicts`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getProjectConflicts(id);
+    const res = await fetch(`${API_BASE}/projects/${id}/conflicts`);
+    return res.json();
   },
 
   // REPORTS
   getReports: async (params = {}) => {
-    try {
-      const query = new URLSearchParams(params).toString();
-      const res = await fetch(`${API_BASE}/reports${query ? `?${query}` : ''}`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getReports(params);
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`${API_BASE}/reports${query ? `?${query}` : ''}`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   getMyReports: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/reports/my-reports`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getMyReports();
+    const res = await fetch(`${API_BASE}/reports/my-reports`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   submitReport: async (formData) => {
-    try {
-      const res = await fetch(`${API_BASE}/reports`, {
-        method: 'POST',
-        headers: getAuthHeaders(true),
-        body: formData
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    let obj = {};
-    if (formData instanceof FormData) {
-      for (const [k, v] of formData.entries()) {
-        if (typeof v === 'string') obj[k] = v;
-      }
-    } else {
-      obj = formData;
-    }
-    return await mockStore.submitReport(obj);
+    const res = await fetch(`${API_BASE}/reports`, {
+      method: 'POST',
+      headers: getAuthHeaders(true),
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to submit report');
+    return data;
   },
 
   replyToReport: async (id, reply, status) => {
-    try {
-      const res = await fetch(`${API_BASE}/reports/${id}/reply`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ reply, status })
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.replyToReport(id, reply, status);
+    const res = await fetch(`${API_BASE}/reports/${id}/reply`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ reply, status })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to reply to report');
+    return data;
   },
 
   confirmReportResolution: async (id) => {
-    try {
-      const res = await fetch(`${API_BASE}/reports/${id}/confirm-resolution`, {
-        method: 'POST',
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.confirmReportResolution(id);
+    const res = await fetch(`${API_BASE}/reports/${id}/confirm-resolution`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to confirm resolution');
+    return data;
   },
 
-  // VERIFICATIONS
+  // VERIFICATIONS (ANTI-GAMING PROGRESS CONFIRMATION)
   submitVerification: async (formData) => {
-    try {
-      const res = await fetch(`${API_BASE}/verifications`, {
-        method: 'POST',
-        headers: getAuthHeaders(true),
-        body: formData
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    let obj = {};
-    if (formData instanceof FormData) {
-      for (const [k, v] of formData.entries()) {
-        if (typeof v === 'string') obj[k] = v;
-      }
-    } else {
-      obj = formData;
-    }
-    return await mockStore.submitVerification(obj);
+    const res = await fetch(`${API_BASE}/verifications`, {
+      method: 'POST',
+      headers: getAuthHeaders(true),
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to submit verification');
+    return data;
   },
 
   getProjectVerifications: async (projectId) => {
-    try {
-      const res = await fetch(`${API_BASE}/verifications/project/${projectId}`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getProjectVerifications(projectId);
+    const res = await fetch(`${API_BASE}/verifications/project/${projectId}`);
+    return res.json();
   },
 
   // WORK ORDERS & COORDINATION
   getWorkOrders: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getWorkOrders();
+    const res = await fetch(`${API_BASE}/work-orders`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   getProblemQueue: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/problem-queue`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getProblemQueue();
+    const res = await fetch(`${API_BASE}/work-orders/problem-queue`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   buildWorkOrder: async (payload) => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/build`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.buildWorkOrder(payload);
+    const res = await fetch(`${API_BASE}/work-orders/build`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to build work order');
+    return data;
   },
 
   completePrimaryWorkOrder: async (workOrderId) => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/complete-primary`, {
-        method: 'POST',
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.completePrimaryWorkOrder(workOrderId);
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/complete-primary`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to complete primary work order');
+    return data;
   },
 
   logWorkOrderDelay: async (workOrderId, payload) => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/delay`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.logWorkOrderDelay(workOrderId, payload);
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/delay`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to log delay');
+    return data;
   },
 
   releaseSecondaryWorkOrder: async (workOrderId) => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/release-secondary`, {
-        method: 'POST',
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.releaseSecondaryWorkOrder(workOrderId);
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/release-secondary`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to release secondary in parallel');
+    return data;
   },
 
   reassignWorkOrder: async (workOrderId, payload) => {
-    try {
-      const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/reassign`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.reassignWorkOrder(workOrderId, payload);
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/reassign`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to reassign work order');
+    return data;
   },
 
   // ANALYTICS
   getAnalyticsOverview: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/analytics/overview`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getAnalyticsOverview();
+    const res = await fetch(`${API_BASE}/analytics/overview`);
+    return res.json();
   },
 
   getScorecards: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/analytics/scorecards`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getScorecards();
+    const res = await fetch(`${API_BASE}/analytics/scorecards`);
+    return res.json();
   },
 
   getHotspots: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/analytics/hotspots`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getHotspots();
+    const res = await fetch(`${API_BASE}/analytics/hotspots`);
+    return res.json();
   },
 
   getEarlyWarnings: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/analytics/early-warnings`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getEarlyWarnings();
+    const res = await fetch(`${API_BASE}/analytics/early-warnings`);
+    return res.json();
   },
 
   // ADMIN
   getAdminConfig: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/config`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getAdminConfig();
+    const res = await fetch(`${API_BASE}/admin/config`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   updateAdminConfig: async (config) => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/config`, {
-        method: 'PATCH',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(config)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.updateAdminConfig(config);
+    const res = await fetch(`${API_BASE}/admin/config`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(config)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to update config');
+    return data;
   },
 
   getDisputes: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/disputes`, {
-        headers: getAuthHeaders()
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getDisputes();
+    const res = await fetch(`${API_BASE}/admin/disputes`, {
+      headers: getAuthHeaders()
+    });
+    return res.json();
   },
 
   resolveDispute: async (projectId, payload) => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/disputes/${projectId}/resolve`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.resolveDispute(projectId, payload);
+    const res = await fetch(`${API_BASE}/admin/disputes/${projectId}/resolve`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to resolve dispute');
+    return data;
   },
 
   addDepartment: async (deptData) => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/departments`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(deptData)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.addDepartment(deptData);
+    const res = await fetch(`${API_BASE}/admin/departments`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(deptData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to register department');
+    return data;
   },
 
   addContractor: async (contData) => {
-    try {
-      const res = await fetch(`${API_BASE}/admin/contractors`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(contData)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.addContractor(contData);
+    const res = await fetch(`${API_BASE}/admin/contractors`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(contData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to accredit contractor');
+    return data;
   },
 
   // ALERTS
   getAlerts: async () => {
-    try {
-      const res = await fetch(`${API_BASE}/alerts`);
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.getAlerts();
+    const res = await fetch(`${API_BASE}/alerts`);
+    return res.json();
   },
 
   createAlert: async (alertData) => {
-    try {
-      const res = await fetch(`${API_BASE}/alerts`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(alertData)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.createAlert(alertData);
+    const res = await fetch(`${API_BASE}/alerts`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(alertData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to create alert');
+    return data;
   },
 
   subscribeAlerts: async (payload) => {
-    try {
-      const res = await fetch(`${API_BASE}/alerts/subscribe`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) return await res.json();
-    } catch (e) {}
-    return await mockStore.subscribeAlerts(payload);
+    const res = await fetch(`${API_BASE}/alerts/subscribe`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to subscribe to alerts');
+    return data;
   }
 };
