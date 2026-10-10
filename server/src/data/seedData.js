@@ -1,0 +1,672 @@
+const seedData = {
+  users: [
+    {
+      id: 'usr_citizen_1',
+      name: 'Priya Raman',
+      email: 'citizen@demo.com',
+      password: 'demo1234',
+      role: 'citizen',
+      ward: 'Ward 4 (Anna Nagar)',
+      phone: '+91 98401 23456'
+    },
+    {
+      id: 'usr_citizen_2',
+      name: 'Karthik Sundaram',
+      email: 'citizen2@demo.com',
+      password: 'demo1234',
+      role: 'citizen',
+      ward: 'Ward 2 (Gandhi Nagar)',
+      phone: '+91 98402 34567'
+    },
+    {
+      id: 'usr_citizen_3',
+      name: 'Ananya Venkatesh',
+      email: 'citizen3@demo.com',
+      password: 'demo1234',
+      role: 'citizen',
+      ward: 'Ward 4 (Anna Nagar)',
+      phone: '+91 98403 45678'
+    },
+    {
+      id: 'usr_sewage_officer',
+      name: 'Er. R. Senthil Nathan',
+      email: 'sewage@demo.com',
+      password: 'demo1234',
+      role: 'department_officer',
+      department_id: 'dept_sewage',
+      department_name: 'Sewage Department',
+      designation: 'Executive Engineer',
+      phone: '+91 94441 55667'
+    },
+    {
+      id: 'usr_roads_officer',
+      name: 'Er. K. Balaji',
+      email: 'roads@demo.com',
+      password: 'demo1234',
+      role: 'department_officer',
+      department_id: 'dept_roads',
+      department_name: 'Roads & Highways Department',
+      designation: 'Assistant Divisional Engineer',
+      phone: '+91 94442 66778'
+    },
+    {
+      id: 'usr_water_officer',
+      name: 'Er. M. Deepa',
+      email: 'water@demo.com',
+      password: 'demo1234',
+      role: 'department_officer',
+      department_id: 'dept_water',
+      department_name: 'Water Works Department',
+      designation: 'Sub-Divisional Officer',
+      phone: '+91 94443 77889'
+    },
+    {
+      id: 'usr_admin',
+      name: 'Dr. V. Rajesh, IAS',
+      email: 'admin@demo.com',
+      password: 'demo1234',
+      role: 'admin',
+      designation: 'Municipal Commissioner & Chief Admin',
+      phone: '+91 94440 11223'
+    }
+  ],
+
+  departments: [
+    {
+      id: 'dept_sewage',
+      name: 'Sewage Department',
+      category: 'sewage',
+      tier: 1,
+      tier_label: 'Underground Deep',
+      head_name: 'Er. R. Senthil Nathan',
+      head_email: 'sewage@demo.com',
+      phone: '044-27221001'
+    },
+    {
+      id: 'dept_water',
+      name: 'Water Works Department',
+      category: 'water',
+      tier: 1,
+      tier_label: 'Underground Deep',
+      head_name: 'Er. M. Deepa',
+      head_email: 'water@demo.com',
+      phone: '044-27221002'
+    },
+    {
+      id: 'dept_drainage',
+      name: 'Storm Drainage Department',
+      category: 'drainage',
+      tier: 2,
+      tier_label: 'Underground Mid',
+      head_name: 'Er. G. Ravichandran',
+      head_email: 'drainage@demo.com',
+      phone: '044-27221003'
+    },
+    {
+      id: 'dept_electricity',
+      name: 'Electricity Board (TANGEDCO)',
+      category: 'electricity',
+      tier: 3,
+      tier_label: 'Utility Conduit',
+      head_name: 'Er. N. Kumar',
+      head_email: 'electricity@demo.com',
+      phone: '044-27221004'
+    },
+    {
+      id: 'dept_telecom',
+      name: 'Telecom & Fiber Authority',
+      category: 'telecom',
+      tier: 3,
+      tier_label: 'Utility Conduit',
+      head_name: 'Mr. S. Anand',
+      head_email: 'telecom@demo.com',
+      phone: '044-27221005'
+    },
+    {
+      id: 'dept_roads',
+      name: 'Roads & Highways Department',
+      category: 'roads',
+      tier: 4,
+      tier_label: 'Surface Pavement',
+      head_name: 'Er. K. Balaji',
+      head_email: 'roads@demo.com',
+      phone: '044-27221006'
+    }
+  ],
+
+  contractors: [
+    {
+      id: 'cont_apex',
+      name: 'Apex Infrastructure Corp',
+      license_no: 'TN-PWD-8421',
+      rating: 4.3,
+      contact_person: 'R. Jagadeesh',
+      phone: '+91 98840 12001',
+      active_projects: 3,
+      delayed_projects: 0
+    },
+    {
+      id: 'cont_lnt',
+      name: 'L&T Urban Utilities Division',
+      license_no: 'TN-PWD-1904',
+      rating: 4.8,
+      contact_person: 'V. Sundar',
+      phone: '+91 98840 12002',
+      active_projects: 2,
+      delayed_projects: 0
+    },
+    {
+      id: 'cont_balaji',
+      name: 'Sri Balaji Civil Constructions',
+      license_no: 'TN-PWD-3312',
+      rating: 3.7,
+      contact_person: 'M. Balakrishnan',
+      phone: '+91 98840 12003',
+      active_projects: 4,
+      delayed_projects: 2
+    },
+    {
+      id: 'cont_reliance',
+      name: 'Reliance Fiber Grid Infra',
+      license_no: 'TN-DOT-9921',
+      rating: 4.2,
+      contact_person: 'A. Mehra',
+      phone: '+91 98840 12004',
+      active_projects: 1,
+      delayed_projects: 0
+    }
+  ],
+
+  projects: [
+    {
+      id: 'proj_sewage_3rd_main',
+      title: 'Underground Main Sewer Line Replacement & Desilting',
+      description: 'Excavation of central duct and replacing 450mm cracked cement pipes with 600mm HDPE sewage lines to stop sewage overflow into streets.',
+      purpose: 'Eliminate recurrent sewage overflow and upgrade carrying capacity for 12,000 residents in Anna Nagar.',
+      category: 'sewage',
+      department_id: 'dept_sewage',
+      department_name: 'Sewage Department',
+      contractor_id: 'cont_apex',
+      contractor_name: 'Apex Infrastructure Corp',
+      ward: 'Ward 4 (Anna Nagar)',
+      address: '3rd Main Road, Near Junction 4, Anna Nagar',
+      latitude: 12.834200,
+      longitude: 79.703600,
+      sanctioned_budget: 4500000,
+      amount_spent: 3200000,
+      maintenance_budget: 500000,
+      budget_variance: -800000,
+      variance_percentage: -17.7,
+      start_date: '2026-10-01',
+      expected_end_date: '2026-10-18',
+      original_end_date: '2026-10-18',
+      status: 'In Progress',
+      contractor_claimed_status: 'in_progress',
+      is_overdue: false,
+      delay_reason: null,
+      delay_history: [],
+      photo_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80',
+      dig_once_sequence: {
+        is_coordinated: true,
+        step_number: 1,
+        total_steps: 2,
+        role: 'Primary (Underground Deep)',
+        subsequent_department: 'Roads & Highways Department',
+        handoff_gap_minutes: 60
+      },
+      timeline: [
+        { date: '2026-10-01', title: 'Work Order Sanctioned', status: 'completed', details: 'Funds released and road permit cleared.' },
+        { date: '2026-10-03', title: 'Trench Excavation', status: 'completed', details: 'Dug 2.4m trench for sewer line access.' },
+        { date: '2026-10-08', title: 'HDPE Pipe Welding', status: 'in_progress', details: 'New pipe joints under pressure testing.' },
+        { date: '2026-10-18', title: 'Hand-off to Roads Dept', status: 'planned', details: 'Roads Dept notified to pave 1 hour after backfill.' }
+      ]
+    },
+    {
+      id: 'proj_roads_3rd_main',
+      title: '3rd Main Road Bitumen Paving & Storm Channel Realignment',
+      description: 'Full road resurfacing with 40mm Dense Bituminous Macadam (DBM) and curb reinstatement, scheduled strictly after sewer pipeline backfill.',
+      purpose: 'Complete surface restoration without double excavation; Dig-Once policy enforced.',
+      category: 'roads',
+      department_id: 'dept_roads',
+      department_name: 'Roads & Highways Department',
+      contractor_id: 'cont_lnt',
+      contractor_name: 'L&T Urban Utilities Division',
+      ward: 'Ward 4 (Anna Nagar)',
+      address: '3rd Main Road, Near Junction 4, Anna Nagar',
+      latitude: 12.834240,
+      longitude: 79.703630,
+      sanctioned_budget: 2800000,
+      amount_spent: 400000,
+      maintenance_budget: 350000,
+      budget_variance: 0,
+      variance_percentage: 0,
+      start_date: '2026-10-19',
+      expected_end_date: '2026-10-26',
+      original_end_date: '2026-10-26',
+      status: 'Planned',
+      contractor_claimed_status: 'planned',
+      is_overdue: false,
+      delay_reason: null,
+      delay_history: [],
+      photo_url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80',
+      dig_once_sequence: {
+        is_coordinated: true,
+        step_number: 2,
+        total_steps: 2,
+        role: 'Secondary (Surface Pavement)',
+        preceding_department: 'Sewage Department',
+        handoff_gap_minutes: 60,
+        dependency_status: 'Awaiting primary completion notice'
+      },
+      timeline: [
+        { date: '2026-10-01', title: 'Work Order Generated', status: 'completed', details: 'Sequenced as secondary step behind Sewage Dept.' },
+        { date: '2026-10-18', title: 'Arrival Window', status: 'pending', details: 'Arrival confirmed 1 hour following sewage backfill sign-off.' },
+        { date: '2026-10-26', title: 'Target Road Handover', status: 'planned', details: 'Smooth motorable surface opened to traffic.' }
+      ]
+    },
+    {
+      id: 'proj_drainage_gandhi_rd',
+      title: 'Storm Water Channel Widening & RCC Box Culvert',
+      description: 'Construction of reinforced cement concrete box drain to prevent monsoon flash floods.',
+      purpose: 'Protect Gandhi Road market and residential quarters from monsoon waterlogging.',
+      category: 'drainage',
+      department_id: 'dept_drainage',
+      department_name: 'Storm Drainage Department',
+      contractor_id: 'cont_balaji',
+      contractor_name: 'Sri Balaji Civil Constructions',
+      ward: 'Ward 2 (Gandhi Nagar)',
+      address: 'Gandhi Road Market Cross, Ward 2',
+      latitude: 12.839800,
+      longitude: 79.708100,
+      sanctioned_budget: 3800000,
+      amount_spent: 4150000,
+      maintenance_budget: 400000,
+      budget_variance: 350000,
+      variance_percentage: 9.2,
+      start_date: '2026-09-10',
+      expected_end_date: '2026-10-22',
+      original_end_date: '2026-09-30',
+      status: 'Delayed',
+      contractor_claimed_status: 'in_progress',
+      is_overdue: true,
+      delay_reason: 'Severe groundwater percolation encountered requiring continuous slurry dewatering pumps and re-engineering of culvert foundation.',
+      delay_history: [
+        {
+          timestamp: '2026-09-28T10:30:00Z',
+          old_end_date: '2026-09-30',
+          new_end_date: '2026-10-22',
+          reason: 'Severe groundwater percolation encountered requiring continuous slurry dewatering pumps and re-engineering of culvert foundation.',
+          authorized_by: 'Er. G. Ravichandran (Executive Engineer)'
+        }
+      ],
+      photo_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
+      timeline: [
+        { date: '2026-09-10', title: 'Excavation Commenced', status: 'completed', details: 'Dug storm drainage trench.' },
+        { date: '2026-09-28', title: 'Delay Logged with Justification', status: 'delayed', details: 'Heavy water table encountered. Extended by 22 days.' },
+        { date: '2026-10-22', title: 'Revised Completion Target', status: 'in_progress', details: 'Culvert casting underway.' }
+      ]
+    },
+    {
+      id: 'proj_power_kamarajar',
+      title: 'Underground 11kV Power Cable Ducting',
+      description: 'Laying insulated power lines into concrete conduits to replace overhead hazardous wires.',
+      purpose: 'Public safety and unhindered power during storms.',
+      category: 'electricity',
+      department_id: 'dept_electricity',
+      department_name: 'Electricity Board (TANGEDCO)',
+      contractor_id: 'cont_balaji',
+      contractor_name: 'Sri Balaji Civil Constructions',
+      ward: 'Ward 1 (Kamarajar Street)',
+      address: 'Kamarajar Street East, Near School',
+      latitude: 12.831500,
+      longitude: 79.699200,
+      sanctioned_budget: 3100000,
+      amount_spent: 3100000,
+      maintenance_budget: 200000,
+      budget_variance: 0,
+      variance_percentage: 0,
+      start_date: '2026-09-15',
+      expected_end_date: '2026-10-05',
+      original_end_date: '2026-10-05',
+      status: 'Disputed',
+      contractor_claimed_status: 'completed',
+      is_overdue: false,
+      delay_reason: null,
+      delay_history: [],
+      photo_url: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=800&q=80',
+      dispute_details: {
+        is_disputed: true,
+        reason: "Contractor claimed 'Completed' on 05 Oct, but 2 verified residents nearby confirmed with photos that cable trenches are left uncovered with pedestrian hazard.",
+        flagged_at: '2026-10-07T14:15:00Z',
+        officer_review_status: 'Inspection Scheduled'
+      },
+      timeline: [
+        { date: '2026-09-15', title: 'Cable Ducting Started', status: 'completed', details: 'Laying 11kV high-tension lines.' },
+        { date: '2026-10-05', title: 'Contractor Claimed Completed', status: 'completed', details: 'Contractor submitted sign-off invoice.' },
+        { date: '2026-10-07', title: 'Citizen Dispute Triggered', status: 'disputed', details: '2 residents verified site has open unpaved hazards. Flagged for review.' }
+      ]
+    },
+    {
+      id: 'proj_water_anna_nagar',
+      title: 'Drinking Water Pipeline Extension & Pressure Metering',
+      description: 'Laying 200mm ductile iron drinking water pipes connecting 450 households to the central reservoir.',
+      purpose: 'Deliver potable water directly to tap connections in Ward 5.',
+      category: 'water',
+      department_id: 'dept_water',
+      department_name: 'Water Works Department',
+      contractor_id: 'cont_lnt',
+      contractor_name: 'L&T Urban Utilities Division',
+      ward: 'Ward 5 (Anna Nagar South)',
+      address: 'Anna Nagar 4th Street, Ward 5',
+      latitude: 12.836500,
+      longitude: 79.706200,
+      sanctioned_budget: 1900000,
+      amount_spent: 1850000,
+      maintenance_budget: 150000,
+      budget_variance: -50000,
+      variance_percentage: -2.6,
+      start_date: '2026-09-01',
+      expected_end_date: '2026-10-04',
+      original_end_date: '2026-10-04',
+      status: 'Citizen-confirmed',
+      contractor_claimed_status: 'completed',
+      is_overdue: false,
+      delay_reason: null,
+      delay_history: [],
+      photo_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      quorum_status: {
+        verified_count: 3,
+        quorum_reached: true,
+        confirmed_at: '2026-10-06T16:00:00Z',
+        message: 'Verified on-site by 3 independent registered citizens with photos.'
+      },
+      timeline: [
+        { date: '2026-09-01', title: 'Pipeline Laid', status: 'completed', details: 'Ductile iron mains assembled.' },
+        { date: '2026-10-04', title: 'Pressure Testing Passed', status: 'completed', details: 'Clean water flow certified.' },
+        { date: '2026-10-06', title: 'Citizen Quorum Confirmed', status: 'citizen_confirmed', details: '3 verified residents confirmed road cleaned and water running.' }
+      ]
+    },
+    {
+      id: 'proj_bus_stand_road',
+      title: 'Temple Ward Bus Stand Approach Road Bitumen Resurfacing',
+      description: 'Cold milling of worn road and dual-layer asphalt paving with reflective lane markings.',
+      purpose: 'Smooth bus commute and pedestrian safety around Temple Ward transit terminal.',
+      category: 'roads',
+      department_id: 'dept_roads',
+      department_name: 'Roads & Highways Department',
+      contractor_id: 'cont_apex',
+      contractor_name: 'Apex Infrastructure Corp',
+      ward: 'Ward 3 (Temple Ward)',
+      address: 'Bus Stand Circle, Temple Ward',
+      latitude: 12.838500,
+      longitude: 79.701500,
+      sanctioned_budget: 3400000,
+      amount_spent: 3380000,
+      maintenance_budget: 300000,
+      budget_variance: -20000,
+      variance_percentage: -0.6,
+      start_date: '2026-08-15',
+      expected_end_date: '2026-09-20',
+      original_end_date: '2026-09-20',
+      status: 'Completed',
+      contractor_claimed_status: 'completed',
+      is_overdue: false,
+      delay_reason: null,
+      delay_history: [],
+      photo_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
+      timeline: [
+        { date: '2026-08-15', title: 'Surface Milling', status: 'completed', details: 'Old bitumen stripped.' },
+        { date: '2026-09-20', title: 'Road Finished & Painted', status: 'completed', details: 'Commissioned on schedule.' }
+      ]
+    }
+  ],
+
+  reports: [
+    {
+      id: 'rep_101',
+      user_id: 'usr_citizen_1',
+      user_name: 'Priya Raman',
+      title: 'Severe Sewage Leakage & Odor Near Bus Stop',
+      description: 'Sewage water has been overflowing from the manhole for 3 days. Foul smell and pedestrians cannot cross the road.',
+      category: 'sewage',
+      problem_type: 'sewage leak',
+      ward: 'Ward 4 (Anna Nagar)',
+      address: '3rd Main Road, Anna Nagar Junction',
+      latitude: 12.834200,
+      longitude: 79.703600,
+      location_source: 'live_gps',
+      location_verified: true,
+      photo_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80',
+      photo_hash: 'a1b2c3d4e5f601',
+      status: 'in_progress',
+      department_reply: 'Sewage engineering team dispatched under Coordinated Work Order WO-101. Work scheduled prior to road repaving.',
+      created_at: '2026-10-06T09:15:00Z',
+      citizen_confirmed_resolved: false
+    },
+    {
+      id: 'rep_102',
+      user_id: 'usr_citizen_3',
+      user_name: 'Ananya Venkatesh',
+      title: 'Deep Pothole Right in Front of Hospital Gate',
+      description: 'Large crater caused by previous pipe digging. Two two-wheelers skidded yesterday.',
+      category: 'roads',
+      problem_type: 'pothole',
+      ward: 'Ward 4 (Anna Nagar)',
+      address: '3rd Main Road, Near Hospital Gate',
+      latitude: 12.834230,
+      longitude: 79.703620, // ~10m from sewage report!
+      location_source: 'exif',
+      location_verified: true,
+      photo_url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80',
+      photo_hash: 'a1b2c3d4e5f602',
+      status: 'in_progress',
+      department_reply: 'Linked with Sewage repair. Roads Dept will arrive 1 hour after sewage backfill.',
+      created_at: '2026-10-06T11:45:00Z',
+      citizen_confirmed_resolved: false
+    },
+    {
+      id: 'rep_103',
+      user_id: 'usr_citizen_2',
+      user_name: 'Karthik Sundaram',
+      title: 'Exposed High-Voltage Cable Dangling near School Lane',
+      description: 'Live wire fallen from broken junction box. Urgent safety risk for school children.',
+      category: 'electricity',
+      problem_type: 'exposed wire',
+      ward: 'Ward 1 (Kamarajar Street)',
+      address: 'Kamarajar Street, Opp Primary School',
+      latitude: 12.831510,
+      longitude: 79.699210,
+      location_source: 'live_gps',
+      location_verified: true,
+      photo_url: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80',
+      photo_hash: 'a1b2c3d4e5f603',
+      status: 'assigned',
+      department_reply: 'Emergency team alerted. Severity rated MAJOR due to live wire risk.',
+      created_at: '2026-10-07T08:30:00Z',
+      citizen_confirmed_resolved: false
+    },
+    {
+      id: 'rep_104',
+      user_id: 'usr_citizen_1',
+      user_name: 'Priya Raman',
+      title: 'Blocked Storm Drain Overflowing during light rain',
+      description: 'Culvert is filled with plastic and silt, road gets flooded with 6 inches of water.',
+      category: 'drainage',
+      problem_type: 'blocked drain',
+      ward: 'Ward 2 (Gandhi Nagar)',
+      address: 'Gandhi Road, Near Vegetable Market',
+      latitude: 12.839810,
+      longitude: 79.708110,
+      location_source: 'manual_pin',
+      location_verified: true,
+      photo_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80',
+      photo_hash: 'a1b2c3d4e5f604',
+      status: 'in_progress',
+      department_reply: 'Culvert widening project ongoing; dewatering active.',
+      created_at: '2026-10-07T14:10:00Z',
+      citizen_confirmed_resolved: false
+    }
+  ],
+
+  verifications: [
+    {
+      id: 'ver_201',
+      project_id: 'proj_power_kamarajar',
+      user_id: 'usr_citizen_1',
+      user_name: 'Priya Raman',
+      user_role: 'citizen',
+      status_voted: 'not_completed',
+      latitude: 12.831505,
+      longitude: 79.699205,
+      gps_accuracy: 8,
+      distance_meters: 6,
+      photo_url: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80',
+      comments: 'Work is definitely NOT completed. Open trench still has loose wires exposed.',
+      created_at: '2026-10-06T15:20:00Z'
+    },
+    {
+      id: 'ver_202',
+      project_id: 'proj_power_kamarajar',
+      user_id: 'usr_citizen_2',
+      user_name: 'Karthik Sundaram',
+      user_role: 'citizen',
+      status_voted: 'not_completed',
+      latitude: 12.831520,
+      longitude: 79.699215,
+      gps_accuracy: 12,
+      distance_meters: 18,
+      photo_url: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80',
+      comments: 'Contractor packed tools but left gravel heap and deep pit on road.',
+      created_at: '2026-10-07T09:40:00Z'
+    },
+    // 3 verifications for proj_water_anna_nagar to satisfy quorum of 3!
+    {
+      id: 'ver_301',
+      project_id: 'proj_water_anna_nagar',
+      user_id: 'usr_citizen_1',
+      user_name: 'Priya Raman',
+      user_role: 'citizen',
+      status_voted: 'completed',
+      latitude: 12.836510,
+      longitude: 79.706210,
+      gps_accuracy: 6,
+      distance_meters: 11,
+      photo_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+      comments: 'Water tap connection running clear, trench backfilled nicely.',
+      created_at: '2026-10-05T10:00:00Z'
+    },
+    {
+      id: 'ver_302',
+      project_id: 'proj_water_anna_nagar',
+      user_id: 'usr_citizen_2',
+      user_name: 'Karthik Sundaram',
+      user_role: 'citizen',
+      status_voted: 'completed',
+      latitude: 12.836495,
+      longitude: 79.706190,
+      gps_accuracy: 9,
+      distance_meters: 15,
+      photo_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+      comments: 'Confirmed water supply restored with high pressure.',
+      created_at: '2026-10-05T14:30:00Z'
+    },
+    {
+      id: 'ver_303',
+      project_id: 'proj_water_anna_nagar',
+      user_id: 'usr_citizen_3',
+      user_name: 'Ananya Venkatesh',
+      user_role: 'citizen',
+      status_voted: 'completed',
+      latitude: 12.836520,
+      longitude: 79.706215,
+      gps_accuracy: 7,
+      distance_meters: 22,
+      photo_url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80',
+      comments: 'Site clean and debris removed.',
+      created_at: '2026-10-06T11:15:00Z'
+    }
+  ],
+
+  workOrders: [
+    {
+      workOrderId: 'WO-2026-101',
+      title: '3rd Main Road Coordinated Dig-Once Sequence',
+      locationAddress: '3rd Main Road, Anna Nagar',
+      ward: 'Ward 4 (Anna Nagar)',
+      latitude: 12.834200,
+      longitude: 79.703600,
+      handoffGapMinutes: 60,
+      status: 'active',
+      primaryDepartment: 'Sewage Department',
+      primaryCategory: 'sewage',
+      secondaryDepartment: 'Roads & Highways Department',
+      secondaryCategory: 'roads',
+      tieBreakReason: 'Standard Depth Dependency: Underground Sewage (Tier 1) prioritized before Surface Roads (Tier 4)',
+      createdAt: '2026-10-06T12:00:00Z',
+      steps: [
+        {
+          stepOrder: 1,
+          role: 'Primary',
+          department: 'Sewage Department',
+          category: 'sewage',
+          action: 'Excavate 2.4m trench, replace collapsed sewer pipe, backfill & compact sand',
+          tier: 1,
+          status: 'in_progress',
+          officerName: 'Er. R. Senthil Nathan',
+          officerPhone: '+91 94441 55667',
+          targetCompletion: '2026-10-18T17:00:00Z'
+        },
+        {
+          stepOrder: 2,
+          role: 'Secondary',
+          department: 'Roads & Highways Department',
+          category: 'roads',
+          action: 'Apply bituminous tack coat, lay 40mm asphalt overlay, mark traffic lanes',
+          tier: 4,
+          status: 'pending',
+          officerName: 'Er. K. Balaji',
+          officerPhone: '+91 94442 66778',
+          scheduledStartTime: 'Scheduled 1 hour following Primary sign-off',
+          tieBreakReason: 'Surface restoration sequential dependency'
+        }
+      ]
+    }
+  ],
+
+  alerts: [
+    {
+      id: 'alt_401',
+      ward: 'Ward 4 (Anna Nagar)',
+      title: 'Lane Restriction: 3rd Main Road Sewer Replacement',
+      message: 'One-way traffic operational near Junction 4 due to active underground pipe excavation. Commercial vehicles advised to use 5th Avenue.',
+      category: 'sewage',
+      affected_roads: ['3rd Main Road', 'Junction 4 Cross'],
+      start_date: '2026-10-01',
+      end_date: '2026-10-26',
+      severity: 'Moderate',
+      created_at: '2026-10-01T08:00:00Z'
+    },
+    {
+      id: 'alt_402',
+      ward: 'Ward 2 (Gandhi Nagar)',
+      title: 'Temporary Market Lane Closure: Storm Culvert Construction',
+      message: 'Deep drainage box culvert casting in progress. Pedestrian boardwalk installed for market access.',
+      category: 'drainage',
+      affected_roads: ['Gandhi Road Market Lane'],
+      start_date: '2026-09-10',
+      end_date: '2026-10-22',
+      severity: 'Major',
+      created_at: '2026-09-10T08:00:00Z'
+    }
+  ],
+
+  settings: {
+    handoffMinutes: 60,
+    verificationRadiusMeters: 200,
+    quorumThreshold: 3,
+    maxPhotoSizeMB: 5,
+    cityCenter: { lat: 12.8342, lng: 79.7036, name: 'Kancheepuram Municipal Corporation' }
+  }
+};
+
+module.exports = seedData;
