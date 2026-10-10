@@ -9,8 +9,7 @@
 | **Team leader** | `Team Lead` |
 | **Team members** | `Member 1`, `Member 2`, `Member 3`, `Member 4` |
 | **Live demo (public link)** | `http://localhost:5173` |
-| **Demo video (2–5 min)** | [`/demo/demo.mp4`](./demo/demo.mp4) |
-| **Demo logins** | See [Demo accounts](#demo-accounts) |
+| **Demo video (2–5 min)** | `https://drive.google.com/file/d/11S1U41V6uMgfp--5oYDJHb4LtFIlC-K3/view?usp=sharing` |
 
 ---
 
