@@ -4,27 +4,8 @@ Zero-buffer full-screen delivery of the CivicTrack Public Works Portal.
 """
 
 import os
-import sys
-import json
-import time
-import socket
-import shutil
-import subprocess
-import urllib.request
 import streamlit as st
 import streamlit.components.v1 as components
-
-# -----------------------------------------------------------------------------
-# Configuration & Constants
-# -----------------------------------------------------------------------------
-BACKEND_PORT = 5000
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-SERVER_DIR = os.path.join(PROJECT_ROOT, "server")
-BACKEND_HEALTH_URL = f"http://localhost:{BACKEND_PORT}/api/health"
-
-# Preferred standalone embed endpoint (hosted directly via Streamlit static serving)
-STATIC_APP_URL = "/app/static/index.html"
-LOCAL_APP_URL = f"http://localhost:{BACKEND_PORT}"
 
 st.set_page_config(
     page_title="CivicTrack | Greater Municipal Corporation Portal",
@@ -32,61 +13,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
-
-# -----------------------------------------------------------------------------
-# Background Process Helper (Optional Local Backend Starter)
-# -----------------------------------------------------------------------------
-def check_backend_health():
-    try:
-        req = urllib.request.Request(BACKEND_HEALTH_URL, headers={'User-Agent': 'CivicTrack-Gateway'})
-        with urllib.request.urlopen(req, timeout=0.5) as response:
-            if response.status == 200:
-                return True
-    except Exception:
-        pass
-    return False
-
-def ensure_backend_started():
-    if check_backend_health():
-        return True
-    node_bin = shutil.which("node") or shutil.which("nodejs")
-    if not node_bin:
-        return False
-    server_index = os.path.join(SERVER_DIR, "index.js")
-    if not os.path.exists(server_index):
-        return False
-    try:
-        log_path = os.path.join(SERVER_DIR, "server.log")
-        log_file = open(log_path, "a", encoding="utf-8")
-        subprocess.Popen(
-            [node_bin, "index.js"],
-            cwd=SERVER_DIR,
-            stdout=log_file,
-            stderr=log_file,
-            shell=(os.name == "nt")
-        )
-        for _ in range(8):
-            time.sleep(0.3)
-            if check_backend_health():
-                return True
-    except Exception:
-        pass
-    return False
-
-# Attempt background backend startup if running locally
-try:
-    ensure_backend_started()
-except Exception:
-    pass
-
-# Choose the active URL (Static Cloud endpoint is 100% independent of localhost)
-static_path = os.path.join(PROJECT_ROOT, "static", "index.html")
-if os.path.exists(static_path):
-    final_url = STATIC_APP_URL
-elif check_backend_health():
-    final_url = LOCAL_APP_URL
-else:
-    final_url = STATIC_APP_URL
 
 # -----------------------------------------------------------------------------
 # Zero-Buffer Fullscreen Streamlit Styling
@@ -146,6 +72,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# Full-Screen App Embed
+# Instant In-Memory Delivery of Full React Single Page Application
 # -----------------------------------------------------------------------------
-components.iframe(final_url, height=1000, scrolling=True)
+BUNDLE_FILE = os.path.join(os.path.dirname(__file__), "client", "dist", "bundle.html")
+STATIC_BUNDLE = os.path.join(os.path.dirname(__file__), "static", "bundle.html")
+
+target_file = BUNDLE_FILE if os.path.exists(BUNDLE_FILE) else STATIC_BUNDLE
+
+with open(target_file, "r", encoding="utf-8") as f:
+    html_code = f.read()
+
+components.html(html_code, height=1000, scrolling=True)
