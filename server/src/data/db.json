@@ -142,6 +142,20 @@
       "ward": "Ward 4 (Anna Nagar)",
       "phone": "9898989898",
       "designation": "Verified Resident"
+    },
+    {
+      "id": "usr_1791643760401_512",
+      "name": "Admin",
+      "email": "admin@admin.com",
+      "password": "admin",
+      "role": "admin",
+      "profession": "admin",
+      "department_id": null,
+      "department_name": null,
+      "contractor_name": null,
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "9898989898",
+      "designation": "Public Official"
     }
   ],
   "departments": [
