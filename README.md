@@ -5,9 +5,9 @@
 
 | | |
 |---|---|
-| **Team name** | `CivicForward` |
-| **Team leader** | `Team Lead` |
-| **Team members** | `Member 1`, `Member 2`, `Member 3`, `Member 4` |
+| **Team name** | `The Four Eyes` |
+| **Team leader** | `Rohiit RS` |
+| **Team members** | `Rohiit RS`, `Ritu Krithik S`, `Dharmik Sankabalan`, `Aagash Vignesh S` |
 | **Live demo (public link)** | `https://hackathon-a84wgtqlq26utfvkzksnse.streamlit.app/` |
 | **Demo video (2–5 min)** | `https://drive.google.com/file/d/11S1U41V6uMgfp--5oYDJHb4LtFIlC-K3/view?usp=sharing` |
 
