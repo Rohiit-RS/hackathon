@@ -45,8 +45,17 @@ app.get('/api/health', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Unhandled Server Error:', err);
-  res.status(500).json({ error: err.message || 'Internal Server Error' });
+  console.error('Handled Server Error:', err.message);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ error: err.message || 'Internal Server Error' });
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
 });
 
 app.listen(PORT, () => {

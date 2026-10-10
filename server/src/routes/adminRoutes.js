@@ -12,20 +12,77 @@ router.get('/config', authenticateToken, requireRole('admin'), (req, res) => {
   });
 });
 
-// PATCH update system configuration (grace periods, verification radius, handoff gap)
+// PATCH update system configuration (grace periods, verification radius, handoff gap, rate limits)
 router.patch('/config', authenticateToken, requireRole('admin'), (req, res) => {
-  const { handoffMinutes, verificationRadiusMeters, quorumThreshold, maxPhotoSizeMB } = req.body;
+  const {
+    handoffMinutes,
+    verificationRadiusMeters,
+    quorumThreshold,
+    maxPhotoSizeMB,
+    maxReportsPerUserPerDay,
+    maxVerificationsPerUserPerDay,
+    gracePeriods,
+    severityThresholds
+  } = req.body;
   const updates = {};
 
   if (handoffMinutes !== undefined) updates.handoffMinutes = parseInt(handoffMinutes, 10);
   if (verificationRadiusMeters !== undefined) updates.verificationRadiusMeters = parseInt(verificationRadiusMeters, 10);
   if (quorumThreshold !== undefined) updates.quorumThreshold = parseInt(quorumThreshold, 10);
   if (maxPhotoSizeMB !== undefined) updates.maxPhotoSizeMB = parseInt(maxPhotoSizeMB, 10);
+  if (maxReportsPerUserPerDay !== undefined) updates.maxReportsPerUserPerDay = parseInt(maxReportsPerUserPerDay, 10);
+  if (maxVerificationsPerUserPerDay !== undefined) updates.maxVerificationsPerUserPerDay = parseInt(maxVerificationsPerUserPerDay, 10);
+  if (gracePeriods) updates.gracePeriods = gracePeriods;
+  if (severityThresholds) updates.severityThresholds = severityThresholds;
 
   const updatedSettings = db.settings.update(updates);
   res.json({
     settings: updatedSettings,
     message: 'Configuration successfully updated by Municipal Administrator'
+  });
+});
+
+// POST add a municipal department
+router.post('/departments', authenticateToken, requireRole('admin'), (req, res) => {
+  const { name, category, tier, tier_label, head_name, head_email, phone } = req.body;
+  if (!name || !category || !tier) {
+    return res.status(400).json({ error: 'Name, category, and depth tier are required.' });
+  }
+
+  const newDept = db.departments.create({
+    name,
+    category: category.toLowerCase(),
+    tier: parseInt(tier, 10),
+    tier_label: tier_label || `Tier ${tier}`,
+    head_name: head_name || 'Department Officer',
+    head_email: head_email || `${category.toLowerCase()}@demo.com`,
+    phone: phone || '044-27221000'
+  });
+
+  res.status(201).json({
+    department: newDept,
+    message: `Department '${newDept.name}' registered into coordination hierarchy.`
+  });
+});
+
+// POST add a contractor
+router.post('/contractors', authenticateToken, requireRole('admin'), (req, res) => {
+  const { name, license_no, rating, contact_person, phone } = req.body;
+  if (!name || !license_no) {
+    return res.status(400).json({ error: 'Contractor name and PWD license number are required.' });
+  }
+
+  const newContractor = db.contractors.create({
+    name,
+    license_no,
+    rating: rating ? parseFloat(rating) : 4.5,
+    contact_person: contact_person || 'Managing Director',
+    phone: phone || '+91 98840 00000'
+  });
+
+  res.status(201).json({
+    contractor: newContractor,
+    message: `Contractor '${newContractor.name}' accredited for public works.`
   });
 });
 

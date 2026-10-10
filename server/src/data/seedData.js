@@ -184,6 +184,7 @@ const seedData = {
       description: 'Excavation of central duct and replacing 450mm cracked cement pipes with 600mm HDPE sewage lines to stop sewage overflow into streets.',
       purpose: 'Eliminate recurrent sewage overflow and upgrade carrying capacity for 12,000 residents in Anna Nagar.',
       category: 'sewage',
+      severity: 'Major',
       department_id: 'dept_sewage',
       department_name: 'Sewage Department',
       contractor_id: 'cont_apex',
@@ -227,6 +228,7 @@ const seedData = {
       description: 'Full road resurfacing with 40mm Dense Bituminous Macadam (DBM) and curb reinstatement, scheduled strictly after sewer pipeline backfill.',
       purpose: 'Complete surface restoration without double excavation; Dig-Once policy enforced.',
       category: 'roads',
+      severity: 'Moderate',
       department_id: 'dept_roads',
       department_name: 'Roads & Highways Department',
       contractor_id: 'cont_lnt',
@@ -270,6 +272,7 @@ const seedData = {
       description: 'Construction of reinforced cement concrete box drain to prevent monsoon flash floods.',
       purpose: 'Protect Gandhi Road market and residential quarters from monsoon waterlogging.',
       category: 'drainage',
+      severity: 'Major',
       department_id: 'dept_drainage',
       department_name: 'Storm Drainage Department',
       contractor_id: 'cont_balaji',
@@ -312,6 +315,7 @@ const seedData = {
       description: 'Laying insulated power lines into concrete conduits to replace overhead hazardous wires.',
       purpose: 'Public safety and unhindered power during storms.',
       category: 'electricity',
+      severity: 'Major',
       department_id: 'dept_electricity',
       department_name: 'Electricity Board (TANGEDCO)',
       contractor_id: 'cont_balaji',
@@ -352,6 +356,7 @@ const seedData = {
       description: 'Laying 200mm ductile iron drinking water pipes connecting 450 households to the central reservoir.',
       purpose: 'Deliver potable water directly to tap connections in Ward 5.',
       category: 'water',
+      severity: 'Minor',
       department_id: 'dept_water',
       department_name: 'Water Works Department',
       contractor_id: 'cont_lnt',
@@ -392,6 +397,7 @@ const seedData = {
       description: 'Cold milling of worn road and dual-layer asphalt paving with reflective lane markings.',
       purpose: 'Smooth bus commute and pedestrian safety around Temple Ward transit terminal.',
       category: 'roads',
+      severity: 'Moderate',
       department_id: 'dept_roads',
       department_name: 'Roads & Highways Department',
       contractor_id: 'cont_apex',
@@ -665,6 +671,18 @@ const seedData = {
     verificationRadiusMeters: 200,
     quorumThreshold: 3,
     maxPhotoSizeMB: 5,
+    maxReportsPerUserPerDay: 10,
+    maxVerificationsPerUserPerDay: 10,
+    gracePeriods: {
+      Major: { expectedHours: 48, level1GraceHours: 24, level2GraceHours: 24 },
+      Moderate: { expectedHours: 120, level1GraceHours: 72, level2GraceHours: 72 },
+      Minor: { expectedHours: 336, level1GraceHours: 168, level2GraceHours: 168 }
+    },
+    severityThresholds: {
+      majorMinReports: 10,
+      moderateMinReports: 4,
+      majorStalledDays: 14
+    },
     cityCenter: { lat: 12.8342, lng: 79.7036, name: 'Kancheepuram Municipal Corporation' }
   }
 };

@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import AreaAlertsBanner from './components/AreaAlertsBanner';
 import ReportModal from './components/ReportModal';
+import AuthModal from './components/AuthModal';
 
 import CitizenDashboard from './pages/CitizenDashboard';
 import DepartmentDashboard from './pages/DepartmentDashboard';
@@ -13,46 +14,53 @@ import AdminDashboard from './pages/AdminDashboard';
 import { api } from './services/api';
 
 function MainApp() {
-  const { user } = useAuth();
+  const { user, isAuthModalOpen, closeAuthModal, authModalTab, openAuthModal } = useAuth();
   const [activeTab, setActiveTab] = useState('projects');
   const [alerts, setAlerts] = useState([]);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportModalLocation, setReportModalLocation] = useState(null);
+
+  const loadAlerts = async () => {
+    try {
+      const res = await api.getAlerts();
+      setAlerts(res.alerts || []);
+    } catch (err) {
+      console.error('Failed to load alerts:', err);
+    }
+  };
 
   useEffect(() => {
-    async function loadAlerts() {
-      try {
-        const res = await api.getAlerts();
-        setAlerts(res.alerts || []);
-      } catch (err) {
-        console.error('Failed to load alerts:', err);
-      }
-    }
     loadAlerts();
   }, []);
+
+  const handleOpenReportModal = (loc = null) => {
+    setReportModalLocation(loc);
+    setIsReportModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       {/* Live Road Closure & Excavation Alerts Banner */}
-      <AreaAlertsBanner alerts={alerts} />
+      <AreaAlertsBanner alerts={alerts} onRefreshAlerts={loadAlerts} />
 
       {/* Navigation Header */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenReportModal={() => setIsReportModalOpen(true)}
+        onOpenReportModal={() => handleOpenReportModal(null)}
         unreadAlertsCount={alerts.length}
       />
 
       {/* Main Content Body */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {activeTab === 'projects' && (
-          <CitizenDashboard onOpenReportModal={() => setIsReportModalOpen(true)} />
+          <CitizenDashboard onOpenReportModal={handleOpenReportModal} />
         )}
         {activeTab === 'work-orders' && <DepartmentDashboard />}
         {activeTab === 'dig-once' && <DigOncePlannerPage />}
         {activeTab === 'analytics' && <AnalyticsDashboard />}
         {activeTab === 'my-reports' && (
-          <MyReportsPage onOpenReportModal={() => setIsReportModalOpen(true)} />
+          <MyReportsPage onOpenReportModal={() => handleOpenReportModal(null)} />
         )}
         {activeTab === 'admin' && <AdminDashboard />}
       </main>
@@ -60,11 +68,22 @@ function MainApp() {
       {/* Global Report Modal */}
       <ReportModal
         isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
+        initialLocation={reportModalLocation}
+        onClose={() => {
+          setIsReportModalOpen(false);
+          setReportModalLocation(null);
+        }}
         onSuccess={() => {
           // Switch to my-reports or refresh
           setActiveTab('my-reports');
         }}
+      />
+
+      {/* Global Auth Modal for Login, Demo Accounts, and Role Registration */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={closeAuthModal}
+        initialTab={authModalTab}
       />
 
       {/* Footer */}

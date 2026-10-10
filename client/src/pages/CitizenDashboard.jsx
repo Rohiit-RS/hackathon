@@ -3,6 +3,8 @@ import MapView from '../components/MapView';
 import ProjectCard from '../components/ProjectCard';
 import ProjectDetailModal from '../components/ProjectDetailModal';
 import VerificationModal from '../components/VerificationModal';
+import CreateProjectModal from '../components/CreateProjectModal';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import {
   Search,
@@ -14,22 +16,30 @@ import {
   ShieldAlert,
   UserCheck,
   RefreshCw,
-  PlusCircle
+  PlusCircle,
+  Building
 } from 'lucide-react';
 
 export default function CitizenDashboard({ onOpenReportModal }) {
+  const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedWard, setSelectedWard] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedSeverity, setSelectedSeverity] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [activeViewMode, setActiveViewMode] = useState('both'); // 'map', 'list', 'both'
 
   const [inspectingProject, setInspectingProject] = useState(null);
   const [verifyingProject, setVerifyingProject] = useState(null);
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
+  const [citizenIssues, setCitizenIssues] = useState([]);
 
-  const loadProjects = async () => {
+  const isOfficerOrAdmin = user?.role === 'department_officer' || user?.role === 'admin';
+
+  const loadData = async () => {
     try {
       setLoading(true);
       const params = {};
@@ -37,24 +47,30 @@ export default function CitizenDashboard({ onOpenReportModal }) {
       if (selectedWard) params.ward = selectedWard;
       if (selectedDept) params.department = selectedDept;
       if (selectedStatus) params.status = selectedStatus;
+      if (selectedSeverity) params.severity = selectedSeverity;
+      if (selectedCategory) params.category = selectedCategory;
 
-      const data = await api.getProjects(params);
-      setProjects(data.projects || []);
+      const [projectsData, queueData] = await Promise.all([
+        api.getProjects(params),
+        api.getProblemQueue().catch(() => ({ prioritizedQueue: [] }))
+      ]);
+      setProjects(projectsData.projects || []);
+      setCitizenIssues(queueData.prioritizedQueue || []);
     } catch (err) {
-      console.error('Failed to load projects:', err);
+      console.error('Failed to load civic data:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadProjects();
-  }, [selectedWard, selectedDept, selectedStatus]);
+    loadData();
+  }, [selectedWard, selectedDept, selectedStatus, selectedSeverity, selectedCategory]);
 
   // Debounced search
   useEffect(() => {
     const timer = setTimeout(() => {
-      loadProjects();
+      loadData();
     }, 300);
     return () => clearTimeout(timer);
   }, [search]);
@@ -82,29 +98,41 @@ export default function CitizenDashboard({ onOpenReportModal }) {
         </div>
 
         {/* Quick KPI stats in Hero */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10 relative z-10 text-xs">
-          <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
-            <div className="text-slate-300 text-[11px]">Total Public Works</div>
-            <div className="text-xl font-bold font-mono text-white mt-0.5">{totalProjects}</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
-            <div className="text-emerald-300 text-[11px] flex items-center gap-1">
-              <UserCheck className="w-3 h-3" /> Citizen-Confirmed
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mt-6 pt-6 border-t border-white/10 relative z-10 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1">
+            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
+              <div className="text-slate-300 text-[11px]">Total Public Works</div>
+              <div className="text-xl font-bold font-mono text-white mt-0.5">{totalProjects}</div>
             </div>
-            <div className="text-xl font-bold font-mono text-emerald-200 mt-0.5">{confirmedCount}</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
-            <div className="text-amber-300 text-[11px] flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3" /> Delayed Works
+            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
+              <div className="text-emerald-300 text-[11px] flex items-center gap-1">
+                <UserCheck className="w-3 h-3" /> Citizen-Confirmed
+              </div>
+              <div className="text-xl font-bold font-mono text-emerald-200 mt-0.5">{confirmedCount}</div>
             </div>
-            <div className="text-xl font-bold font-mono text-amber-200 mt-0.5">{delayedCount}</div>
-          </div>
-          <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
-            <div className="text-red-300 text-[11px] flex items-center gap-1">
-              <ShieldAlert className="w-3 h-3" /> Disputed Sites
+            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
+              <div className="text-amber-300 text-[11px] flex items-center gap-1">
+                <AlertTriangle className="w-3 h-3" /> Delayed Works
+              </div>
+              <div className="text-xl font-bold font-mono text-amber-200 mt-0.5">{delayedCount}</div>
             </div>
-            <div className="text-xl font-bold font-mono text-red-200 mt-0.5">{disputedCount}</div>
+            <div className="bg-white/10 backdrop-blur-xs p-3 rounded-2xl">
+              <div className="text-red-300 text-[11px] flex items-center gap-1">
+                <ShieldAlert className="w-3 h-3" /> Disputed Sites
+              </div>
+              <div className="text-xl font-bold font-mono text-red-200 mt-0.5">{disputedCount}</div>
+            </div>
           </div>
+
+          {isOfficerOrAdmin && (
+            <button
+              onClick={() => setIsCreateProjectOpen(true)}
+              className="bg-civic-500 hover:bg-civic-600 text-white font-bold px-4 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap self-start sm:self-auto"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Sanction Public Work</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -152,8 +180,8 @@ export default function CitizenDashboard({ onOpenReportModal }) {
           </div>
         </div>
 
-        {/* Dropdown Filters */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-slate-100 text-xs">
+        {/* Dropdown Filters (Ward, Dept, Category, Severity, Status) */}
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 border-t border-slate-100 text-xs">
           <div>
             <select
               value={selectedWard}
@@ -186,6 +214,35 @@ export default function CitizenDashboard({ onOpenReportModal }) {
 
           <div>
             <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full p-2 rounded-xl border border-slate-300 font-medium text-slate-700 bg-slate-50"
+            >
+              <option value="">All Categories</option>
+              <option value="roads">Roads & Surface</option>
+              <option value="sewage">Sewage</option>
+              <option value="water">Water Works</option>
+              <option value="drainage">Storm Drainage</option>
+              <option value="electricity">Electricity</option>
+              <option value="telecom">Telecom</option>
+            </select>
+          </div>
+
+          <div>
+            <select
+              value={selectedSeverity}
+              onChange={(e) => setSelectedSeverity(e.target.value)}
+              className="w-full p-2 rounded-xl border border-slate-300 font-medium text-slate-700 bg-slate-50"
+            >
+              <option value="">All Severities</option>
+              <option value="Major">Major Priority</option>
+              <option value="Moderate">Moderate Priority</option>
+              <option value="Minor">Minor Priority</option>
+            </select>
+          </div>
+
+          <div>
+            <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="w-full p-2 rounded-xl border border-slate-300 font-medium text-slate-700 bg-slate-50"
@@ -206,12 +263,14 @@ export default function CitizenDashboard({ onOpenReportModal }) {
                 setSearch('');
                 setSelectedWard('');
                 setSelectedDept('');
+                setSelectedCategory('');
+                setSelectedSeverity('');
                 setSelectedStatus('');
               }}
               className="w-full p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold transition flex items-center justify-center gap-1"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Reset Filters</span>
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -233,8 +292,13 @@ export default function CitizenDashboard({ onOpenReportModal }) {
             </div>
             <MapView
               projects={projects}
+              citizenIssues={citizenIssues}
               onSelectProject={(proj) => setInspectingProject(proj)}
               onVerifyProject={(proj) => setVerifyingProject(proj)}
+              onProjectCreated={loadData}
+              onReportIssueAtLocation={(issue) => {
+                if (onOpenReportModal) onOpenReportModal(issue);
+              }}
             />
           </div>
         )}
@@ -283,7 +347,7 @@ export default function CitizenDashboard({ onOpenReportModal }) {
         <ProjectDetailModal
           project={inspectingProject}
           onClose={() => setInspectingProject(null)}
-          onRefresh={loadProjects}
+          onRefresh={loadData}
           onOpenVerify={(p) => {
             setInspectingProject(null);
             setVerifyingProject(p);
@@ -297,7 +361,17 @@ export default function CitizenDashboard({ onOpenReportModal }) {
           isOpen={true}
           onClose={() => setVerifyingProject(null)}
           onSuccess={() => {
-            loadProjects();
+            loadData();
+          }}
+        />
+      )}
+
+      {isCreateProjectOpen && (
+        <CreateProjectModal
+          isOpen={true}
+          onClose={() => setIsCreateProjectOpen(false)}
+          onSuccess={() => {
+            loadData();
           }}
         />
       )}

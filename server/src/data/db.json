@@ -7,7 +7,11 @@
       "password": "demo1234",
       "role": "citizen",
       "ward": "Ward 4 (Anna Nagar)",
-      "phone": "+91 98401 23456"
+      "phone": "+91 98401 23456",
+      "subscribedWards": [
+        "Ward 4"
+      ],
+      "commuteRoute": ""
     },
     {
       "id": "usr_citizen_2",
@@ -68,6 +72,76 @@
       "role": "admin",
       "designation": "Municipal Commissioner & Chief Admin",
       "phone": "+91 94440 11223"
+    },
+    {
+      "id": "usr_1791642972293_721",
+      "name": "Er. Meenakshi Sundaram",
+      "email": "officer_1791642972293@tn.gov.in",
+      "password": "password123",
+      "role": "department_officer",
+      "profession": "officer",
+      "department_id": "dept_water",
+      "department_name": "Water Works Department",
+      "contractor_name": null,
+      "ward": "Chennai Metro Region",
+      "phone": "+91 98400 00000",
+      "designation": "Assistant Executive Engineer"
+    },
+    {
+      "id": "usr_1791642972298_169",
+      "name": "R. K. Ramanathan",
+      "email": "contractor_1791642972298@lnt.com",
+      "password": "password123",
+      "role": "contractor",
+      "profession": "contractor",
+      "department_id": null,
+      "department_name": null,
+      "contractor_name": "L&T Infrastructure Division",
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "+91 98400 00000",
+      "designation": "Site Project Lead"
+    },
+    {
+      "id": "usr_1791643067746_274",
+      "name": "Er. Meenakshi Sundaram",
+      "email": "officer_1791643067746@tn.gov.in",
+      "password": "password123",
+      "role": "department_officer",
+      "profession": "officer",
+      "department_id": "dept_water",
+      "department_name": "Water Works Department",
+      "contractor_name": null,
+      "ward": "Chennai Metro Region",
+      "phone": "+91 98400 00000",
+      "designation": "Assistant Executive Engineer"
+    },
+    {
+      "id": "usr_1791643067748_657",
+      "name": "R. K. Ramanathan",
+      "email": "contractor_1791643067748@lnt.com",
+      "password": "password123",
+      "role": "contractor",
+      "profession": "contractor",
+      "department_id": null,
+      "department_name": null,
+      "contractor_name": "L&T Infrastructure Division",
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "+91 98400 00000",
+      "designation": "Site Project Lead"
+    },
+    {
+      "id": "usr_1791643428745_358",
+      "name": "Dharmik",
+      "email": "tbmdharmik@gmail.com",
+      "password": "Dharmik1234",
+      "role": "citizen",
+      "profession": "citizen",
+      "department_id": null,
+      "department_name": null,
+      "contractor_name": null,
+      "ward": "Ward 4 (Anna Nagar)",
+      "phone": "9898989898",
+      "designation": "Verified Resident"
     }
   ],
   "departments": [
@@ -181,6 +255,7 @@
       "description": "Excavation of central duct and replacing 450mm cracked cement pipes with 600mm HDPE sewage lines to stop sewage overflow into streets.",
       "purpose": "Eliminate recurrent sewage overflow and upgrade carrying capacity for 12,000 residents in Anna Nagar.",
       "category": "sewage",
+      "severity": "Major",
       "department_id": "dept_sewage",
       "department_name": "Sewage Department",
       "contractor_id": "cont_apex",
@@ -244,6 +319,7 @@
       "description": "Full road resurfacing with 40mm Dense Bituminous Macadam (DBM) and curb reinstatement, scheduled strictly after sewer pipeline backfill.",
       "purpose": "Complete surface restoration without double excavation; Dig-Once policy enforced.",
       "category": "roads",
+      "severity": "Moderate",
       "department_id": "dept_roads",
       "department_name": "Roads & Highways Department",
       "contractor_id": "cont_lnt",
@@ -302,6 +378,7 @@
       "description": "Construction of reinforced cement concrete box drain to prevent monsoon flash floods.",
       "purpose": "Protect Gandhi Road market and residential quarters from monsoon waterlogging.",
       "category": "drainage",
+      "severity": "Major",
       "department_id": "dept_drainage",
       "department_name": "Storm Drainage Department",
       "contractor_id": "cont_balaji",
@@ -359,6 +436,7 @@
       "description": "Laying insulated power lines into concrete conduits to replace overhead hazardous wires.",
       "purpose": "Public safety and unhindered power during storms.",
       "category": "electricity",
+      "severity": "Major",
       "department_id": "dept_electricity",
       "department_name": "Electricity Board (TANGEDCO)",
       "contractor_id": "cont_balaji",
@@ -375,8 +453,8 @@
       "start_date": "2026-09-15",
       "expected_end_date": "2026-10-05",
       "original_end_date": "2026-10-05",
-      "status": "Disputed",
-      "contractor_claimed_status": "completed",
+      "status": "In Progress",
+      "contractor_claimed_status": "in_progress",
       "is_overdue": false,
       "delay_reason": null,
       "delay_history": [],
@@ -406,7 +484,9 @@
           "status": "disputed",
           "details": "2 residents verified site has open unpaved hazards. Flagged for review."
         }
-      ]
+      ],
+      "dispute_resolved_at": "2026-10-10T12:29:44.271Z",
+      "dispute_resolution_notes": "Admin executive order executed by Dr. V. Rajesh, IAS"
     },
     {
       "id": "proj_water_anna_nagar",
@@ -414,6 +494,7 @@
       "description": "Laying 200mm ductile iron drinking water pipes connecting 450 households to the central reservoir.",
       "purpose": "Deliver potable water directly to tap connections in Ward 5.",
       "category": "water",
+      "severity": "Minor",
       "department_id": "dept_water",
       "department_name": "Water Works Department",
       "contractor_id": "cont_lnt",
@@ -469,6 +550,7 @@
       "description": "Cold milling of worn road and dual-layer asphalt paving with reflective lane markings.",
       "purpose": "Smooth bus commute and pedestrian safety around Temple Ward transit terminal.",
       "category": "roads",
+      "severity": "Moderate",
       "department_id": "dept_roads",
       "department_name": "Roads & Highways Department",
       "contractor_id": "cont_apex",
@@ -505,6 +587,82 @@
           "details": "Commissioned on schedule."
         }
       ]
+    },
+    {
+      "id": "proj_1791637480782",
+      "title": "sewage idk",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. R. Senthil Nathan.",
+      "purpose": "Scheduled Dig-Once Overhaul for sewage",
+      "category": "sewage",
+      "severity": "Moderate",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 6 (Orikkai Corridor)",
+      "address": "Gandhi Road Junction",
+      "latitude": 12.825630921306365,
+      "longitude": 79.70375061035158,
+      "sanctioned_budget": 2500000,
+      "amount_spent": 0,
+      "maintenance_budget": 250000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "2026-10-31",
+      "original_end_date": "2026-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹25,00,000 sanctioned."
+        }
+      ]
+    },
+    {
+      "id": "proj_1791638632239",
+      "title": "SKILL ISSUE",
+      "description": "Scheduled Dig-Once Overhaul scheduled by Er. K. Balaji.",
+      "purpose": "Scheduled Dig-Once Overhaul for sewage",
+      "category": "sewage",
+      "severity": "Major",
+      "department_id": "dept_sewage",
+      "department_name": "Sewage Department",
+      "contractor_id": "cont_apex",
+      "contractor_name": "Apex Infrastructure Corp",
+      "ward": "Ward 6 (Orikkai Corridor)",
+      "address": "Gandhi Road Junction",
+      "latitude": 12.829254317706999,
+      "longitude": 79.706367123253,
+      "sanctioned_budget": 25000000,
+      "amount_spent": 0,
+      "maintenance_budget": 2500000,
+      "budget_variance": 0,
+      "variance_percentage": 0,
+      "start_date": "2026-10-10",
+      "expected_end_date": "3000-10-31",
+      "original_end_date": "3000-10-31",
+      "status": "Planned",
+      "contractor_claimed_status": "planned",
+      "is_overdue": false,
+      "delay_reason": null,
+      "delay_history": [],
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=800&q=80",
+      "timeline": [
+        {
+          "date": "2026-10-10",
+          "title": "Project Sanctioned & Approved",
+          "status": "completed",
+          "details": "Initial budget of ₹2,50,00,000 sanctioned."
+        }
+      ]
     }
   ],
   "reports": [
@@ -525,7 +683,7 @@
       "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
       "photo_hash": "a1b2c3d4e5f601",
       "status": "in_progress",
-      "department_reply": "Coordinated Work Order WO-1791582147021-862 generated. Primary: Sewage Department. Secondary: Storm Drainage Department.",
+      "department_reply": "Sewage engineering team dispatched under Coordinated Work Order WO-101. Work scheduled prior to road repaving.",
       "created_at": "2026-10-06T09:15:00Z",
       "citizen_confirmed_resolved": false
     },
@@ -546,7 +704,7 @@
       "photo_url": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80",
       "photo_hash": "a1b2c3d4e5f602",
       "status": "in_progress",
-      "department_reply": "Coordinated Work Order WO-1791582147021-862 generated. Primary: Sewage Department. Secondary: Storm Drainage Department.",
+      "department_reply": "Linked with Sewage repair. Roads Dept will arrive 1 hour after sewage backfill.",
       "created_at": "2026-10-06T11:45:00Z",
       "citizen_confirmed_resolved": false
     },
@@ -566,8 +724,8 @@
       "location_verified": true,
       "photo_url": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80",
       "photo_hash": "a1b2c3d4e5f603",
-      "status": "in_progress",
-      "department_reply": "Coordinated Work Order WO-1791582147021-862 generated. Primary: Sewage Department. Secondary: Storm Drainage Department.",
+      "status": "assigned",
+      "department_reply": "Emergency team alerted. Severity rated MAJOR due to live wire risk.",
       "created_at": "2026-10-07T08:30:00Z",
       "citizen_confirmed_resolved": false
     },
@@ -588,8 +746,252 @@
       "photo_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
       "photo_hash": "a1b2c3d4e5f604",
       "status": "in_progress",
-      "department_reply": "Coordinated Work Order WO-1791582147021-862 generated. Primary: Sewage Department. Secondary: Storm Drainage Department.",
+      "department_reply": "Culvert widening project ongoing; dewatering active.",
       "created_at": "2026-10-07T14:10:00Z",
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791635189385_757",
+      "created_at": "2026-10-10T12:26:29.385Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "tt",
+      "description": "idk",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "3rd Main Road, Anna Nagar Junction",
+      "latitude": 12.8342,
+      "longitude": 79.7036,
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791635189383_c1695701.png",
+      "photos": [
+        "/uploads/img_1791635189383_c1695701.png"
+      ],
+      "photo_hash": "c1695701ddbefa172f1224e4ca0923bff2e9d69db4d84c0ef3f3463079b03368",
+      "photos_hashes": [
+        "c1695701ddbefa172f1224e4ca0923bff2e9d69db4d84c0ef3f3463079b03368"
+      ],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791635641685_708",
+      "created_at": "2026-10-10T12:34:01.685Z",
+      "status": "submitted",
+      "user_id": "usr_roads_officer",
+      "user_name": "Er. K. Balaji",
+      "user_email": "roads@demo.com",
+      "title": "test",
+      "description": "",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "3rd Main Road, Anna Nagar Junction",
+      "latitude": 12.8342,
+      "longitude": 79.7036,
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791635641684_c79de106.png",
+      "photos": [
+        "/uploads/img_1791635641684_c79de106.png"
+      ],
+      "photo_hash": "c79de1063e9e6770320ec9023d7586b676e2610e3894ed66497d9bc412588e6c",
+      "photos_hashes": [
+        "c79de1063e9e6770320ec9023d7586b676e2610e3894ed66497d9bc412588e6c"
+      ],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791638356513_860",
+      "created_at": "2026-10-10T13:19:16.513Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "SKILL ISSUE",
+      "description": "E",
+      "category": "electricity",
+      "problem_type": "exposed wire",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Gandhi Road / Collectorate Junction",
+      "latitude": 12.8342,
+      "longitude": 79.7036,
+      "jurisdiction": "Kancheepuram Municipal Corporation",
+      "jurisdiction_zone": "municipal_corporation",
+      "jurisdiction_warning": null,
+      "location_source": "manual_pin",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791638356510_841e1666.png",
+      "photos": [
+        "/uploads/img_1791638356510_841e1666.png"
+      ],
+      "photo_hash": "841e1666212507329820e1356b933dc8373781e889a954c47ef3ad6a17032a5d",
+      "photos_hashes": [
+        "841e1666212507329820e1356b933dc8373781e889a954c47ef3ad6a17032a5d"
+      ],
+      "department_reply": "sasad",
+      "citizen_confirmed_resolved": false,
+      "replied_by": "Er. K. Balaji",
+      "replied_at": "2026-10-10T13:22:17.105Z"
+    },
+    {
+      "id": "rep_1791642972303_51",
+      "created_at": "2026-10-10T14:36:12.303Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Severe pipeline leak on Poonamallee High Road",
+      "description": "",
+      "category": "water",
+      "problem_type": "pipeline burst",
+      "ward": "Chennai Metro Region",
+      "address": "Poonamallee High Road, Chennai",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
+      "photos": [
+        "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80"
+      ],
+      "photo_hash": null,
+      "photos_hashes": [],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791642972306_750",
+      "created_at": "2026-10-10T14:36:12.306Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Damaged pavement on Avinashi Road",
+      "description": "",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Coimbatore Division",
+      "address": "Avinashi Road Highway",
+      "latitude": 11.0168,
+      "longitude": 76.9558,
+      "jurisdiction": "Tamil Nadu State Public Works & Highways",
+      "jurisdiction_zone": "tamil_nadu_state",
+      "jurisdiction_warning": "Notice: Grievance tagged across Tamil Nadu Regional Corridor. Ticket registered and shared with respective State District Administration.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
+      "photos": [
+        "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80"
+      ],
+      "photo_hash": null,
+      "photos_hashes": [],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791643067751_354",
+      "created_at": "2026-10-10T14:37:47.751Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Severe pipeline leak on Poonamallee High Road",
+      "description": "",
+      "category": "water",
+      "problem_type": "pipeline burst",
+      "ward": "Chennai Metro Region",
+      "address": "Poonamallee High Road, Chennai",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
+      "photos": [
+        "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80"
+      ],
+      "photo_hash": null,
+      "photos_hashes": [],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791643067753_868",
+      "created_at": "2026-10-10T14:37:47.753Z",
+      "status": "submitted",
+      "user_id": "usr_citizen_1",
+      "user_name": "Priya Raman",
+      "user_email": "citizen@demo.com",
+      "title": "Damaged pavement on Avinashi Road",
+      "description": "",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Coimbatore Division",
+      "address": "Avinashi Road Highway",
+      "latitude": 11.0168,
+      "longitude": 76.9558,
+      "jurisdiction": "Tamil Nadu State Public Works & Highways",
+      "jurisdiction_zone": "tamil_nadu_state",
+      "jurisdiction_warning": "Notice: Grievance tagged across Tamil Nadu Regional Corridor. Ticket registered and shared with respective State District Administration.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
+      "photos": [
+        "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80"
+      ],
+      "photo_hash": null,
+      "photos_hashes": [],
+      "department_reply": null,
+      "citizen_confirmed_resolved": false
+    },
+    {
+      "id": "rep_1791643505987_517",
+      "created_at": "2026-10-10T14:45:05.987Z",
+      "status": "submitted",
+      "user_id": "usr_1791643428745_358",
+      "user_name": "Dharmik",
+      "user_email": "tbmdharmik@gmail.com",
+      "title": "Skill Issue",
+      "description": "idk",
+      "category": "roads",
+      "problem_type": "pothole",
+      "ward": "Ward 4 (Anna Nagar)",
+      "address": "Gandhi Road / Collectorate Junction",
+      "latitude": 12.834941520819036,
+      "longitude": 80.13592805866286,
+      "jurisdiction": "Greater Chennai Metropolitan Area (CMDA)",
+      "jurisdiction_zone": "greater_chennai",
+      "jurisdiction_warning": "Notice: Grievance located in Greater Chennai Metropolitan Area. Ticket accepted and escalated to State Highways / CMDA Regional Office.",
+      "location_source": "live_gps",
+      "location_verified": true,
+      "verification_note": "Location verified by device GPS",
+      "photo_url": "/uploads/img_1791643505986_0a40e402.png",
+      "photos": [
+        "/uploads/img_1791643505986_0a40e402.png"
+      ],
+      "photo_hash": "0a40e4021800c8dbde8fe2d4abf3f9988581e6e820b0d41f81f60f165b03053a",
+      "photos_hashes": [
+        "0a40e4021800c8dbde8fe2d4abf3f9988581e6e820b0d41f81f60f165b03053a"
+      ],
+      "department_reply": null,
       "citizen_confirmed_resolved": false
     }
   ],
@@ -679,7 +1081,7 @@
       "latitude": 12.8342,
       "longitude": 79.7036,
       "handoffGapMinutes": 60,
-      "status": "active",
+      "status": "handoff_in_progress",
       "primaryDepartment": "Sewage Department",
       "primaryCategory": "sewage",
       "secondaryDepartment": "Roads & Highways Department",
@@ -694,10 +1096,11 @@
           "category": "sewage",
           "action": "Excavate 2.4m trench, replace collapsed sewer pipe, backfill & compact sand",
           "tier": 1,
-          "status": "in_progress",
+          "status": "completed",
           "officerName": "Er. R. Senthil Nathan",
           "officerPhone": "+91 94441 55667",
-          "targetCompletion": "2026-10-18T17:00:00Z"
+          "targetCompletion": "2026-10-18T17:00:00Z",
+          "completedAt": "2026-10-10T12:29:20.966Z"
         },
         {
           "stepOrder": 2,
@@ -706,264 +1109,16 @@
           "category": "roads",
           "action": "Apply bituminous tack coat, lay 40mm asphalt overlay, mark traffic lanes",
           "tier": 4,
-          "status": "pending",
+          "status": "scheduled",
           "officerName": "Er. K. Balaji",
           "officerPhone": "+91 94442 66778",
-          "scheduledStartTime": "Scheduled 1 hour following Primary sign-off",
-          "tieBreakReason": "Surface restoration sequential dependency"
-        }
-      ]
-    },
-    {
-      "workOrderId": "WO-1791582147021-862",
-      "locationAddress": "3rd Main Road, Anna Nagar Junction",
-      "ward": "Ward 4 (Anna Nagar)",
-      "latitude": 12.834215,
-      "longitude": 79.70361,
-      "handoffGapMinutes": 60,
-      "status": "handoff_in_progress",
-      "primaryDepartment": "Sewage Department",
-      "primaryCategory": "sewage",
-      "secondaryDepartment": "Storm Drainage Department",
-      "totalSteps": 4,
-      "steps": [
-        {
-          "stepOrder": 1,
-          "role": "Primary",
-          "problem": {
-            "groupId": "cluster_1_sewage__sewage leak",
-            "clusterId": "cluster_1",
-            "latitude": 12.834215,
-            "longitude": 79.70361,
-            "address": "3rd Main Road, Anna Nagar Junction",
-            "ward": "Ward 4 (Anna Nagar)",
-            "category": "sewage",
-            "problemType": "sewage leak",
-            "reportCount": 1,
-            "weightedReportCount": 1,
-            "reportIds": [
-              "rep_101"
-            ],
-            "reports": [
-              {
-                "id": "rep_101",
-                "user_id": "usr_citizen_1",
-                "user_name": "Priya Raman",
-                "title": "Severe Sewage Leakage & Odor Near Bus Stop",
-                "description": "Sewage water has been overflowing from the manhole for 3 days. Foul smell and pedestrians cannot cross the road.",
-                "category": "sewage",
-                "problem_type": "sewage leak",
-                "ward": "Ward 4 (Anna Nagar)",
-                "address": "3rd Main Road, Anna Nagar Junction",
-                "latitude": 12.8342,
-                "longitude": 79.7036,
-                "location_source": "live_gps",
-                "location_verified": true,
-                "photo_url": "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80",
-                "photo_hash": "a1b2c3d4e5f601",
-                "status": "in_progress",
-                "department_reply": "Sewage engineering team dispatched under Coordinated Work Order WO-101. Work scheduled prior to road repaving.",
-                "created_at": "2026-10-06T09:15:00Z",
-                "citizen_confirmed_resolved": false
-              }
-            ],
-            "earliestReportDate": "2026-10-06T09:15:00.000Z",
-            "latestReportDate": "2026-10-06T09:15:00.000Z",
-            "photos": [
-              "https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80"
-            ],
-            "status": "in_progress",
-            "severity": "Minor",
-            "tier": 1,
-            "departmentName": "Sewage Department",
-            "tierLabel": "Underground Deep"
-          },
-          "department": "Sewage Department",
-          "category": "sewage",
-          "tier": 1,
-          "tieBreakReason": "Primary underground utility priority",
-          "status": "completed",
-          "completedAt": "2026-10-09T21:42:33.483Z"
-        },
-        {
-          "stepOrder": 2,
-          "role": "Secondary",
-          "problem": {
-            "groupId": "cluster_3_drainage__blocked drain",
-            "clusterId": "cluster_3",
-            "latitude": 12.83981,
-            "longitude": 79.70811,
-            "address": "Gandhi Road, Near Vegetable Market",
-            "ward": "Ward 2 (Gandhi Nagar)",
-            "category": "drainage",
-            "problemType": "blocked drain",
-            "reportCount": 1,
-            "weightedReportCount": 0.5,
-            "reportIds": [
-              "rep_104"
-            ],
-            "reports": [
-              {
-                "id": "rep_104",
-                "user_id": "usr_citizen_1",
-                "user_name": "Priya Raman",
-                "title": "Blocked Storm Drain Overflowing during light rain",
-                "description": "Culvert is filled with plastic and silt, road gets flooded with 6 inches of water.",
-                "category": "drainage",
-                "problem_type": "blocked drain",
-                "ward": "Ward 2 (Gandhi Nagar)",
-                "address": "Gandhi Road, Near Vegetable Market",
-                "latitude": 12.83981,
-                "longitude": 79.70811,
-                "location_source": "manual_pin",
-                "location_verified": true,
-                "photo_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
-                "photo_hash": "a1b2c3d4e5f604",
-                "status": "in_progress",
-                "department_reply": "Culvert widening project ongoing; dewatering active.",
-                "created_at": "2026-10-07T14:10:00Z",
-                "citizen_confirmed_resolved": false
-              }
-            ],
-            "earliestReportDate": "2026-10-07T14:10:00.000Z",
-            "latestReportDate": "2026-10-07T14:10:00.000Z",
-            "photos": [
-              "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80"
-            ],
-            "status": "in_progress",
-            "severity": "Moderate",
-            "tier": 2,
-            "departmentName": "Storm Drainage Department",
-            "tierLabel": "Underground Mid"
-          },
-          "department": "Storm Drainage Department",
-          "category": "drainage",
-          "tier": 2,
+          "scheduledStartTime": "2026-10-10T13:29:20.966Z",
           "tieBreakReason": "Surface restoration sequential dependency",
-          "status": "scheduled",
-          "scheduledStartTime": "2026-10-09T22:42:33.483Z",
           "notificationSent": true,
-          "notificationMessage": "Automatic Handoff: Primary work by Sewage Department completed at 3:12:33 am. Your team is scheduled to commence at 4:12:33 am (1-hour gap elapsed)."
-        },
-        {
-          "stepOrder": 3,
-          "role": "Secondary",
-          "problem": {
-            "groupId": "cluster_2_electricity__exposed wire",
-            "clusterId": "cluster_2",
-            "latitude": 12.83151,
-            "longitude": 79.69921,
-            "address": "Kamarajar Street, Opp Primary School",
-            "ward": "Ward 1 (Kamarajar Street)",
-            "category": "electricity",
-            "problemType": "exposed wire",
-            "reportCount": 1,
-            "weightedReportCount": 1,
-            "reportIds": [
-              "rep_103"
-            ],
-            "reports": [
-              {
-                "id": "rep_103",
-                "user_id": "usr_citizen_2",
-                "user_name": "Karthik Sundaram",
-                "title": "Exposed High-Voltage Cable Dangling near School Lane",
-                "description": "Live wire fallen from broken junction box. Urgent safety risk for school children.",
-                "category": "electricity",
-                "problem_type": "exposed wire",
-                "ward": "Ward 1 (Kamarajar Street)",
-                "address": "Kamarajar Street, Opp Primary School",
-                "latitude": 12.83151,
-                "longitude": 79.69921,
-                "location_source": "live_gps",
-                "location_verified": true,
-                "photo_url": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80",
-                "photo_hash": "a1b2c3d4e5f603",
-                "status": "assigned",
-                "department_reply": "Emergency team alerted. Severity rated MAJOR due to live wire risk.",
-                "created_at": "2026-10-07T08:30:00Z",
-                "citizen_confirmed_resolved": false
-              }
-            ],
-            "earliestReportDate": "2026-10-07T08:30:00.000Z",
-            "latestReportDate": "2026-10-07T08:30:00.000Z",
-            "photos": [
-              "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80"
-            ],
-            "status": "pending",
-            "severity": "Major",
-            "tier": 3,
-            "departmentName": "Electricity Board",
-            "tierLabel": "Utility Conduit"
-          },
-          "department": "Electricity Board",
-          "category": "electricity",
-          "tier": 3,
-          "tieBreakReason": "Surface restoration sequential dependency",
-          "status": "pending"
-        },
-        {
-          "stepOrder": 4,
-          "role": "Secondary",
-          "problem": {
-            "groupId": "cluster_1_roads__pothole",
-            "clusterId": "cluster_1",
-            "latitude": 12.834215,
-            "longitude": 79.70361,
-            "address": "3rd Main Road, Anna Nagar Junction",
-            "ward": "Ward 4 (Anna Nagar)",
-            "category": "roads",
-            "problemType": "pothole",
-            "reportCount": 1,
-            "weightedReportCount": 1,
-            "reportIds": [
-              "rep_102"
-            ],
-            "reports": [
-              {
-                "id": "rep_102",
-                "user_id": "usr_citizen_3",
-                "user_name": "Ananya Venkatesh",
-                "title": "Deep Pothole Right in Front of Hospital Gate",
-                "description": "Large crater caused by previous pipe digging. Two two-wheelers skidded yesterday.",
-                "category": "roads",
-                "problem_type": "pothole",
-                "ward": "Ward 4 (Anna Nagar)",
-                "address": "3rd Main Road, Near Hospital Gate",
-                "latitude": 12.83423,
-                "longitude": 79.70362,
-                "location_source": "exif",
-                "location_verified": true,
-                "photo_url": "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80",
-                "photo_hash": "a1b2c3d4e5f602",
-                "status": "in_progress",
-                "department_reply": "Linked with Sewage repair. Roads Dept will arrive 1 hour after sewage backfill.",
-                "created_at": "2026-10-06T11:45:00Z",
-                "citizen_confirmed_resolved": false
-              }
-            ],
-            "earliestReportDate": "2026-10-06T11:45:00.000Z",
-            "latestReportDate": "2026-10-06T11:45:00.000Z",
-            "photos": [
-              "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80"
-            ],
-            "status": "in_progress",
-            "severity": "Moderate",
-            "tier": 4,
-            "departmentName": "Roads & Highways Department",
-            "tierLabel": "Surface Pavement"
-          },
-          "department": "Roads & Highways Department",
-          "category": "roads",
-          "tier": 4,
-          "tieBreakReason": "Surface restoration sequential dependency",
-          "status": "pending"
+          "notificationMessage": "Automatic Handoff: Primary work by Sewage Department completed at 5:59:20 pm. Your team is scheduled to commence at 6:59:20 pm (1-hour gap elapsed)."
         }
       ],
-      "tieBreakReason": "Dependency hierarchy: Underground first, Surface last",
-      "createdAt": "2026-10-09T21:42:27.021Z",
-      "primaryExpectedDurationHours": 12,
-      "secondaryConfirmedStartTime": "2026-10-09T22:42:33.483Z"
+      "secondaryConfirmedStartTime": "2026-10-10T13:29:20.966Z"
     }
   ],
   "alerts": [
@@ -1002,6 +1157,30 @@
     "verificationRadiusMeters": 200,
     "quorumThreshold": 3,
     "maxPhotoSizeMB": 5,
+    "maxReportsPerUserPerDay": 10,
+    "maxVerificationsPerUserPerDay": 10,
+    "gracePeriods": {
+      "Major": {
+        "expectedHours": 48,
+        "level1GraceHours": 24,
+        "level2GraceHours": 24
+      },
+      "Moderate": {
+        "expectedHours": 120,
+        "level1GraceHours": 72,
+        "level2GraceHours": 72
+      },
+      "Minor": {
+        "expectedHours": 336,
+        "level1GraceHours": 168,
+        "level2GraceHours": 168
+      }
+    },
+    "severityThresholds": {
+      "majorMinReports": 10,
+      "moderateMinReports": 4,
+      "majorStalledDays": 14
+    },
     "cityCenter": {
       "lat": 12.8342,
       "lng": 79.7036,

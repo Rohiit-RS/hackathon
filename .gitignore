@@ -22,6 +22,8 @@ pnpm-debug.log*
 # Uploads & Temp
 uploads/*
 !uploads/.gitkeep
+server/uploads/*
+!server/uploads/.gitkeep
 *.tmp
 
 # OS

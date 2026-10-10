@@ -59,6 +59,19 @@ function validateVerificationAttempt({
     };
   }
 
+  // Rate limits: Maximum verifications per user per day
+  const maxDaily = config.MAX_VERIFICATIONS_PER_USER_PER_DAY || 10;
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+  const userRecentVerifications = existingUserVerifications.filter(
+    v => v.user_id === user.id && (!v.created_at || new Date(v.created_at).getTime() > oneDayAgo)
+  );
+  if (userRecentVerifications.length >= maxDaily) {
+    return {
+      allowed: false,
+      reason: `Anti-Abuse Rate Limit: You have reached the maximum allowed limit of ${maxDaily} verifications per day`
+    };
+  }
+
   // 4. Geotagged photo requirement
   if (!photoUrl) {
     return {

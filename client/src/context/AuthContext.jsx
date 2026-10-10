@@ -7,8 +7,10 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('civictrack_token') || null);
   const [loading, setLoading] = useState(true);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState('login'); // 'login' or 'register'
 
-  // Initialize with stored user or default demo citizen
+  // Initialize with stored user token if present, otherwise start unauthenticated
   useEffect(() => {
     async function initAuth() {
       try {
@@ -17,20 +19,19 @@ export function AuthProvider({ children }) {
           if (res.user) {
             setUser(res.user);
           } else {
-            // Default to citizen demo login
-            await switchDemoRole('citizen');
+            // Invalid stored token
+            setToken(null);
+            setUser(null);
+            localStorage.removeItem('civictrack_token');
           }
         } else {
-          // Default to citizen demo login
-          await switchDemoRole('citizen');
+          setUser(null);
         }
       } catch (err) {
-        console.warn('Auth init failed, loading demo citizen:', err);
-        try {
-          await switchDemoRole('citizen');
-        } catch (e) {
-          console.error('Demo auth failed:', e);
-        }
+        console.warn('Stored token expired or invalid:', err);
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('civictrack_token');
       } finally {
         setLoading(false);
       }
@@ -44,6 +45,16 @@ export function AuthProvider({ children }) {
     setToken(res.token);
     setUser(res.user);
     localStorage.setItem('civictrack_token', res.token);
+    setIsAuthModalOpen(false);
+    return res.user;
+  };
+
+  const register = async (userData) => {
+    const res = await api.register(userData);
+    setToken(res.token);
+    setUser(res.user);
+    localStorage.setItem('civictrack_token', res.token);
+    setIsAuthModalOpen(false);
     return res.user;
   };
 
@@ -63,11 +74,21 @@ export function AuthProvider({ children }) {
       setToken(res.token);
       setUser(res.user);
       localStorage.setItem('civictrack_token', res.token);
+      setIsAuthModalOpen(false);
       return res.user;
     } catch (err) {
       console.error('Demo switch error:', err);
       throw err;
     }
+  };
+
+  const openAuthModal = (tab = 'login') => {
+    setAuthModalTab(tab);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
   };
 
   const value = {
@@ -76,8 +97,13 @@ export function AuthProvider({ children }) {
     loading,
     isAuthenticated: !!user,
     login,
+    register,
     logout,
-    switchDemoRole
+    switchDemoRole,
+    isAuthModalOpen,
+    authModalTab,
+    openAuthModal,
+    closeAuthModal
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

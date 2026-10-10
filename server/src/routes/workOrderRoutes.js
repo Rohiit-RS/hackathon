@@ -124,15 +124,115 @@ router.post('/:id/complete-primary', authenticateToken, requireRole('department_
   });
 });
 
-// GET escalation status of a work order
-router.get('/:id/escalation', (req, res) => {
+// POST officer logs a delay explanation on overdue work order
+router.patch('/:id/delay', authenticateToken, requireRole('department_officer', 'admin'), (req, res) => {
   const workOrder = db.workOrders.findById(req.params.id);
   if (!workOrder) {
     return res.status(404).json({ error: 'Work order not found' });
   }
 
-  const escalation = evaluateEscalation(workOrder);
-  res.json({ escalation });
+  const { delay_reason, new_target_date } = req.body;
+  if (!delay_reason || delay_reason.trim().length < 5) {
+    return res.status(400).json({
+      error: 'Mandatory Policy: A formal justification (delay_reason) is strictly required to log a delay on a work order.'
+    });
+  }
+
+  const delayEntry = {
+    timestamp: new Date().toISOString(),
+    reason: delay_reason,
+    new_target_date: new_target_date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    authorized_by: `${req.user.name} (${req.user.designation || req.user.role})`
+  };
+
+  const steps = [...(workOrder.steps || [])];
+  if (steps[0]) {
+    steps[0].delay_history = [...(steps[0].delay_history || []), delayEntry];
+    steps[0].targetCompletion = delayEntry.new_target_date;
+  }
+
+  const updated = db.workOrders.update(workOrder.workOrderId, {
+    status: 'delayed',
+    is_overdue: true,
+    delay_reason,
+    delay_history: [...(workOrder.delay_history || []), delayEntry],
+    steps
+  });
+
+  res.json({
+    workOrder: updated,
+    message: `Delay logged publicly by ${req.user.name}. Secondary department notified of updated arrival expectation.`
+  });
+});
+
+// POST Admin Level 2: Release secondary department to proceed in parallel
+router.post('/:id/release-secondary', authenticateToken, requireRole('admin'), (req, res) => {
+  const workOrder = db.workOrders.findById(req.params.id);
+  if (!workOrder) {
+    return res.status(404).json({ error: 'Work order not found' });
+  }
+
+  const steps = [...(workOrder.steps || [])];
+  if (steps.length < 2) {
+    return res.status(400).json({ error: 'No secondary department found to release' });
+  }
+
+  steps[1].status = 'in_progress';
+  steps[1].parallel_override = true;
+  steps[1].override_notes = `Admin executive order: Released in parallel by ${req.user.name}`;
+  steps[1].scheduledStartTime = new Date().toISOString();
+
+  const updated = db.workOrders.update(workOrder.workOrderId, {
+    status: 'parallel_active',
+    secondary_released_parallel: true,
+    steps
+  });
+
+  res.json({
+    workOrder: updated,
+    message: `Level 2 Executive Action: Secondary department (${steps[1].department}) released to proceed in parallel.`
+  });
+});
+
+// POST Admin Level 2: Reassign stalled work order to another contractor or department
+router.post('/:id/reassign', authenticateToken, requireRole('admin'), (req, res) => {
+  const workOrder = db.workOrders.findById(req.params.id);
+  if (!workOrder) {
+    return res.status(404).json({ error: 'Work order not found' });
+  }
+
+  const { newContractorId, newDepartmentId, notes } = req.body;
+  const steps = [...(workOrder.steps || [])];
+
+  if (steps.length > 0) {
+    if (newContractorId) {
+      const contractor = db.contractors.findById(newContractorId);
+      if (contractor) {
+        steps[0].contractorName = contractor.name;
+        steps[0].contractorId = contractor.id;
+      }
+    }
+    if (newDepartmentId) {
+      const dept = db.departments.findById(newDepartmentId);
+      if (dept) {
+        steps[0].department = dept.name;
+        steps[0].departmentId = dept.id;
+      }
+    }
+    steps[0].reassigned_at = new Date().toISOString();
+    steps[0].reassigned_by = req.user.name;
+  }
+
+  const updated = db.workOrders.update(workOrder.workOrderId, {
+    status: 'reassigned',
+    reassignment_notes: notes || `Reassigned by Municipal Administrator ${req.user.name}`,
+    steps
+  });
+
+  res.json({
+    workOrder: updated,
+    message: `Level 2 Executive Action: Stalled work order successfully reassigned.`
+  });
 });
 
 module.exports = router;

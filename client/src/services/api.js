@@ -25,6 +25,17 @@ export const api = {
     return data;
   },
 
+  register: async (userData) => {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    return data;
+  },
+
   demoSwitch: async (role, email) => {
     const res = await fetch(`${API_BASE}/auth/demo-switch`, {
       method: 'POST',
@@ -192,6 +203,38 @@ export const api = {
     return data;
   },
 
+  logWorkOrderDelay: async (workOrderId, payload) => {
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/delay`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to log delay');
+    return data;
+  },
+
+  releaseSecondaryWorkOrder: async (workOrderId) => {
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/release-secondary`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to release secondary in parallel');
+    return data;
+  },
+
+  reassignWorkOrder: async (workOrderId, payload) => {
+    const res = await fetch(`${API_BASE}/work-orders/${workOrderId}/reassign`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to reassign work order');
+    return data;
+  },
+
   // ANALYTICS
   getAnalyticsOverview: async () => {
     const res = await fetch(`${API_BASE}/analytics/overview`);
@@ -250,6 +293,28 @@ export const api = {
     return data;
   },
 
+  addDepartment: async (deptData) => {
+    const res = await fetch(`${API_BASE}/admin/departments`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(deptData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to register department');
+    return data;
+  },
+
+  addContractor: async (contData) => {
+    const res = await fetch(`${API_BASE}/admin/contractors`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(contData)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to accredit contractor');
+    return data;
+  },
+
   // ALERTS
   getAlerts: async () => {
     const res = await fetch(`${API_BASE}/alerts`);
@@ -264,6 +329,17 @@ export const api = {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed to create alert');
+    return data;
+  },
+
+  subscribeAlerts: async (payload) => {
+    const res = await fetch(`${API_BASE}/alerts/subscribe`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to subscribe to alerts');
     return data;
   }
 };

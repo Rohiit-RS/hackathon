@@ -6,8 +6,19 @@ const { detectDigOnceConflicts } = require('../engines/digOnceEngine');
 
 // GET all projects with filters
 router.get('/', optionalAuth, (req, res) => {
-  const { ward, department, status, category, search } = req.query;
-  let list = db.projects.findAll();
+  const { ward, department, status, category, severity, search } = req.query;
+  const now = new Date();
+  let list = db.projects.findAll().map(p => {
+    // Dynamic overdue check according to README delay rules
+    const isPastEnd = p.expected_end_date && new Date(p.expected_end_date) < now;
+    const isUnfinished = p.status !== 'Completed' && p.status !== 'Citizen-confirmed';
+    const isOverdue = p.is_overdue || (isPastEnd && isUnfinished);
+    return {
+      ...p,
+      is_overdue: isOverdue,
+      status: (isOverdue && p.status === 'In Progress') ? 'Delayed' : p.status
+    };
+  });
 
   if (ward) {
     list = list.filter(p => p.ward && p.ward.toLowerCase().includes(ward.toLowerCase()));
@@ -20,6 +31,9 @@ router.get('/', optionalAuth, (req, res) => {
   }
   if (category) {
     list = list.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase());
+  }
+  if (severity) {
+    list = list.filter(p => p.severity && p.severity.toLowerCase() === severity.toLowerCase());
   }
   if (status) {
     list = list.filter(p => p.status && p.status.toLowerCase() === status.toLowerCase());
@@ -76,6 +90,7 @@ router.post('/', authenticateToken, requireRole('department_officer', 'admin'), 
     description,
     purpose,
     category,
+    severity,
     department_id,
     contractor_id,
     ward,
@@ -99,6 +114,7 @@ router.post('/', authenticateToken, requireRole('department_officer', 'admin'), 
     description: description || '',
     purpose: purpose || 'Civic infrastructure improvement',
     category,
+    severity: severity || 'Moderate',
     department_id: dept.id,
     department_name: dept.name,
     contractor_id: contractor.id,

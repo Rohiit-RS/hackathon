@@ -77,6 +77,17 @@ export default function ProjectDetailModal({ project, onClose, onRefresh, onOpen
               <span className="text-[10px] font-mono text-slate-300">
                 ID: {project.id}
               </span>
+              {project.severity && (
+                <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full font-mono ${
+                  project.severity === 'Major'
+                    ? 'bg-red-500 text-white'
+                    : project.severity === 'Moderate'
+                    ? 'bg-amber-500 text-slate-900 font-bold'
+                    : 'bg-blue-500 text-white'
+                }`}>
+                  {project.severity} Priority
+                </span>
+              )}
               {isDelayed && (
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3" /> Delayed

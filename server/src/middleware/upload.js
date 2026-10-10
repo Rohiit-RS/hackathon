@@ -14,7 +14,8 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: {
-    fileSize: MAX_FILE_SIZE // 5 MB
+    fileSize: MAX_FILE_SIZE, // 5 MB
+    files: 3
   }
 });
 
@@ -22,34 +23,63 @@ const upload = multer({
  * Middleware that validates image buffer magic bytes and writes to disk
  */
 function handleValidatedUpload(req, res, next) {
-  if (!req.file) {
+  const filesToProcess = [];
+  if (req.file) {
+    filesToProcess.push(req.file);
+  } else if (req.files) {
+    if (Array.isArray(req.files)) {
+      filesToProcess.push(...req.files);
+    } else {
+      Object.values(req.files).forEach(fList => {
+        if (Array.isArray(fList)) filesToProcess.push(...fList);
+        else if (fList) filesToProcess.push(fList);
+      });
+    }
+  }
+
+  if (filesToProcess.length === 0) {
     return next();
   }
 
-  // 1. Check Magic Bytes
-  const magicValidation = validateMagicBytes(req.file.buffer);
-  if (!magicValidation.isValid) {
-    return res.status(400).json({
-      error: magicValidation.error
-    });
+  // Count limit check: Maximum 3 photos per report, 1 per verification
+  if (filesToProcess.length > 3) {
+    return res.status(400).json({ error: 'Exceeded upload limit: Maximum 3 photos permitted per submission.' });
   }
 
-  // 2. Compute file hash
-  const fileHash = computeFileHash(req.file.buffer);
+  req.savedFiles = [];
 
-  // 3. Generate sanitized file name
-  const ext = magicValidation.mimeType === 'image/jpeg' ? '.jpg' : magicValidation.mimeType === 'image/png' ? '.png' : '.webp';
-  const filename = `img_${Date.now()}_${fileHash.substring(0, 8)}${ext}`;
-  const filepath = path.join(UPLOADS_DIR, filename);
+  for (const file of filesToProcess) {
+    // 1. Check Magic Bytes
+    const magicValidation = validateMagicBytes(file.buffer);
+    if (!magicValidation.isValid) {
+      return res.status(400).json({
+        error: magicValidation.error
+      });
+    }
 
-  // 4. Save to disk with EXIF privacy preserved
-  fs.writeFileSync(filepath, req.file.buffer);
+    // 2. Compute file hash
+    const fileHash = computeFileHash(file.buffer);
 
-  // Attach metadata to req.file
-  req.file.savedFilename = filename;
-  req.file.fileHash = fileHash;
-  req.file.publicUrl = `/uploads/${filename}`;
-  req.file.mimeType = magicValidation.mimeType;
+    // 3. Generate sanitized file name
+    const ext = magicValidation.mimeType === 'image/jpeg' ? '.jpg' : magicValidation.mimeType === 'image/png' ? '.png' : '.webp';
+    const filename = `img_${Date.now()}_${fileHash.substring(0, 8)}${ext}`;
+    const filepath = path.join(UPLOADS_DIR, filename);
+
+    // 4. Save to disk with EXIF privacy preserved
+    fs.writeFileSync(filepath, file.buffer);
+
+    // Attach metadata
+    file.savedFilename = filename;
+    file.fileHash = fileHash;
+    file.publicUrl = `/uploads/${filename}`;
+    file.mimeType = magicValidation.mimeType;
+
+    req.savedFiles.push(file);
+  }
+
+  if (!req.file && req.savedFiles.length > 0) {
+    req.file = req.savedFiles[0];
+  }
 
   next();
 }

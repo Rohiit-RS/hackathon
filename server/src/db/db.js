@@ -17,7 +17,20 @@ let dbState = {
     handoffMinutes: 60,
     verificationRadiusMeters: 200,
     quorumThreshold: 3,
-    maxPhotoSizeMB: 5
+    maxPhotoSizeMB: 5,
+    maxReportsPerUserPerDay: 10,
+    maxVerificationsPerUserPerDay: 10,
+    gracePeriods: {
+      Major: { expectedHours: 48, level1GraceHours: 24, level2GraceHours: 24 },
+      Moderate: { expectedHours: 120, level1GraceHours: 72, level2GraceHours: 72 },
+      Minor: { expectedHours: 336, level1GraceHours: 168, level2GraceHours: 168 }
+    },
+    severityThresholds: {
+      majorMinReports: 10,
+      moderateMinReports: 4,
+      majorStalledDays: 14
+    },
+    cityCenter: { lat: 12.8342, lng: 79.7036, name: 'Kancheepuram Municipal Corporation' }
   }
 };
 
@@ -76,19 +89,40 @@ const db = {
       dbState.users.push(user);
       saveDb();
       return user;
+    },
+    update: (id, updates) => {
+      const idx = dbState.users.findIndex(u => u.id === id);
+      if (idx !== -1) {
+        dbState.users[idx] = { ...dbState.users[idx], ...updates };
+        saveDb();
+        return dbState.users[idx];
+      }
+      return null;
     }
   },
 
   // DEPARTMENTS
   departments: {
     findAll: () => dbState.departments,
-    findById: (id) => dbState.departments.find(d => d.id === id)
+    findById: (id) => dbState.departments.find(d => d.id === id),
+    create: (deptData) => {
+      const dept = { id: `dept_${Date.now()}`, ...deptData };
+      dbState.departments.push(dept);
+      saveDb();
+      return dept;
+    }
   },
 
   // CONTRACTORS
   contractors: {
     findAll: () => dbState.contractors,
-    findById: (id) => dbState.contractors.find(c => c.id === id)
+    findById: (id) => dbState.contractors.find(c => c.id === id),
+    create: (contData) => {
+      const cont = { id: `cont_${Date.now()}`, rating: 4.5, active_projects: 0, delayed_projects: 0, ...contData };
+      dbState.contractors.push(cont);
+      saveDb();
+      return cont;
+    }
   },
 
   // PROJECTS

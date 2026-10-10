@@ -80,9 +80,12 @@ function clusterReports(reports, radiusMeters = DEFAULT_RADIUS_METERS) {
 
     for (const [key, bucket] of Object.entries(typeBuckets)) {
       const totalCount = bucket.reports.length;
-      // Calculate weighted count: manual pin = 0.5 weight, verified GPS/EXIF = 1.0 weight
+      // Calculate weighted count: manual pin = 0.5 weight until corroborated by high-trust report or officer review
+      const isCorroborated = bucket.reports.some(
+        r => (r.location_source !== 'manual_pin' && r.location_verified) || r.department_reply
+      );
       const weightedCount = bucket.reports.reduce((acc, r) => {
-        const weight = r.location_source === 'manual_pin' ? 0.5 : 1.0;
+        const weight = (r.location_source === 'manual_pin' && !isCorroborated) ? 0.5 : 1.0;
         return acc + weight;
       }, 0);
 

@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../db/db');
 const { optionalAuth, authenticateToken, requireRole } = require('../middleware/auth');
 const { upload, handleValidatedUpload } = require('../middleware/upload');
-const { isWithinCityBoundary, verifyLocationConsistency } = require('../utils/geo');
+const { isWithinCityBoundary, checkJurisdictionZone, verifyLocationConsistency } = require('../utils/geo');
 const { clusterReports } = require('../engines/clusteringEngine');
 
 // GET all reports (with optional clustering parameter)
@@ -39,7 +39,7 @@ router.get('/my-reports', authenticateToken, (req, res) => {
 router.post(
   '/',
   authenticateToken,
-  upload.single('photo'),
+  upload.any(),
   handleValidatedUpload,
   (req, res) => {
     try {
@@ -61,13 +61,26 @@ router.post(
         return res.status(400).json({ error: 'Title, category, and valid coordinates are required.' });
       }
 
+      // Enforce Anti-Spam Daily Rate Limit: "Maximum reports per user per day to prevent spam"
+      const maxDaily = db.settings.get().maxReportsPerUserPerDay || 10;
+      const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+      const userRecentReports = db.reports.findByUserId(req.user.id).filter(
+        r => new Date(r.created_at).getTime() > oneDayAgo
+      );
+      if (userRecentReports.length >= maxDaily) {
+        return res.status(429).json({
+          error: `Anti-Spam Rate Limit Exceeded: You have reached the maximum limit of ${maxDaily} reports per 24 hours.`
+        });
+      }
+
       const parsedLat = parseFloat(latitude);
       const parsedLng = parseFloat(longitude);
 
-      // Check municipal boundary rule: "A pin outside the supported city boundary is rejected"
-      if (!isWithinCityBoundary(parsedLat, parsedLng)) {
+      // Check jurisdiction zone: allows Core Municipal, Greater Chennai, and all of Tamil Nadu State
+      const zoneCheck = checkJurisdictionZone(parsedLat, parsedLng);
+      if (!zoneCheck.isValid) {
         return res.status(400).json({
-          error: 'Location rejected: The specified coordinates lie outside the supported Municipal Corporation boundary.'
+          error: zoneCheck.error || 'Invalid geographic coordinates provided.'
         });
       }
 
@@ -91,19 +104,24 @@ router.post(
       }
 
       // Check duplicate image upload by hash
-      if (req.file && req.file.fileHash) {
-        const existingDuplicate = db.reports.findAll().find(
-          r => r.photo_hash && r.photo_hash === req.file.fileHash
-        );
-        if (existingDuplicate) {
-          return res.status(409).json({
-            error: 'Duplicate photo detected: An identical image has already been uploaded for this issue.'
-          });
+      const files = req.savedFiles || (req.file ? [req.file] : []);
+      const allReports = db.reports.findAll();
+      for (const file of files) {
+        if (file.fileHash) {
+          const duplicate = allReports.find(
+            r => r.photo_hash === file.fileHash || (r.photos_hashes && r.photos_hashes.includes(file.fileHash))
+          );
+          if (duplicate) {
+            return res.status(409).json({
+              error: 'Duplicate photo detected: An identical image has already been uploaded for this issue.'
+            });
+          }
         }
       }
 
-      const photoUrl = req.file
-        ? req.file.publicUrl
+      const photos = files.map(f => f.publicUrl);
+      const photoUrl = photos.length > 0
+        ? photos[0]
         : 'https://images.unsplash.com/photo-1541888946425-d0fbb18626c8?auto=format&fit=crop&w=600&q=80';
 
       const newReport = {
@@ -118,18 +136,23 @@ router.post(
         address: address || `${ward || 'Ward 4'}, Civic Site`,
         latitude: parsedLat,
         longitude: parsedLng,
+        jurisdiction: zoneCheck.jurisdiction,
+        jurisdiction_zone: zoneCheck.zone,
+        jurisdiction_warning: zoneCheck.warning,
         location_source, // 'exif', 'live_gps', 'manual_pin'
         location_verified: locationVerified,
         verification_note: verificationNote,
         photo_url: photoUrl,
-        photo_hash: req.file ? req.file.fileHash : null,
+        photos: photos.length > 0 ? photos : [photoUrl],
+        photo_hash: files[0]?.fileHash || null,
+        photos_hashes: files.map(f => f.fileHash).filter(Boolean),
         status: 'submitted',
         department_reply: null,
         citizen_confirmed_resolved: false
       };
 
       const created = db.reports.create(newReport);
-      res.status(201).json({ report: created });
+      res.status(201).json({ report: created, warning: zoneCheck.warning });
     } catch (err) {
       console.error('Error in POST /api/reports:', err);
       res.status(500).json({ error: 'Server error processing report submission' });
