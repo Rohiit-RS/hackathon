@@ -345,8 +345,7 @@ export default function MapView({
   const [conflictWarning, setConflictWarning] = useState(null);
 
   const tileUrls = {
-    street: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+    street: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   };
 
   // Drag handler for maintenance pin
@@ -834,23 +833,9 @@ export default function MapView({
             </button>
           )}
 
-          <div className="bg-white/95 backdrop-blur-md rounded-xl p-1 shadow-md border border-slate-200 flex items-center gap-1 text-[11px] font-semibold text-slate-700">
-            <button
-              onClick={() => setTileMode('street')}
-              className={`px-2.5 py-1 rounded-lg transition ${
-                tileMode === 'street' ? 'bg-[#0b2545] text-white font-bold' : 'hover:bg-slate-100'
-              }`}
-            >
-              Municipal Grid
-            </button>
-            <button
-              onClick={() => setTileMode('light')}
-              className={`px-2.5 py-1 rounded-lg transition ${
-                tileMode === 'light' ? 'bg-[#0b2545] text-white font-bold' : 'hover:bg-slate-100'
-              }`}
-            >
-              Carto Light
-            </button>
+          <div className="bg-white/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-md border border-slate-200 flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
+            <Layers className="w-3.5 h-3.5 text-civic-700" />
+            <span>Municipal Grid</span>
           </div>
         </div>
 
