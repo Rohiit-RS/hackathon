@@ -8,7 +8,7 @@
 | **Team name** | `CivicForward` |
 | **Team leader** | `Team Lead` |
 | **Team members** | `Member 1`, `Member 2`, `Member 3`, `Member 4` |
-| **Live demo (public link)** | `http://localhost:5173` |
+| **Live demo (public link)** | `https://hackathon-a84wgtqlq26utfvkzksnse.streamlit.app/` |
 | **Demo video (2–5 min)** | `https://drive.google.com/file/d/11S1U41V6uMgfp--5oYDJHb4LtFIlC-K3/view?usp=sharing` |
 
 ---
