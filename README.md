@@ -6,8 +6,8 @@
 | | |
 |---|---|
 | **Team name** | `CivicForward` |
-| **Team leader** | `Team Lead` |
-| **Team members** | `Member 1`, `Member 2`, `Member 3`, `Member 4` |
+| **Team leader** | `Rohiit R S` |
+| **Team members** | `S Ritu Krithik`, `Dharmik Sankabalan Balamurugan`, `Aagash Vignesh`, `Rohiit R S` |
 | **Live demo (public link)** | `http://localhost:5173` |
 | **Demo video (2–5 min)** | [`/demo/demo.mp4`](./demo/demo.mp4) |
 | **Demo logins** | See [Demo accounts](#demo-accounts) |
